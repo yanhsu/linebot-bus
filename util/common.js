@@ -54,7 +54,7 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
   } else if(StopStatus == 3) {
     return "末班車已駛離"
   } else if(StopStatus == 4) {
-    return "尚未發車"
+    return "今日未營運"
   } else if(PlateNumb == -1 || !PlateNumb) {
     return `尚未發車\n下班車預計抵達時間${nextTime}`
   }  else {

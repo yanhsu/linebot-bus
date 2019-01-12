@@ -23,28 +23,30 @@ bot.on('message', async function(event) {
     console.log(event);
     if (event.message.type = 'text') {
       let msg = event.message.text;
-      try {
-          if(msg == '查詢') {
-            step[senderID] = 1;
-            await event.reply('歡迎使用台中公車查詢系統\n請輸入要查詢的路線號碼');
-          } else if (step[senderID] == 1) {
+        if(msg == '查詢') {
+          step[senderID] = 1;
+          await event.reply('歡迎使用台中公車查詢系統\n請輸入要查詢的路線號碼');
+        } else if (step[senderID] == 1) {
+          try {
             let route = await bus.getRoute(msg);
             let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
             let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
             await event.reply(formatQuickReply("請選擇去程回程",[go,back]));
             searchRoute[senderID] = msg;
             step[senderID] = 2;
-          } else if (step[senderID] == 3) {
+          } catch (error) {
+            await event.reply("您所輸入的路線不存在，請重新輸入");
+          }
+        } else if (step[senderID] == 3) {
+          try {
             let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
             await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
             step[senderID] = 0;
+          } catch (error) {
+            await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
           }
-          console.log(msg);
-      } catch (error) {
-        await event.reply(`發生錯誤，請重新點選選單查詢`);
-        console.log(error);
-        step[senderID] = 0;
-      }
+        }
+        console.log(msg);
     } else {
        await event.reply("輸入錯誤，請重新開始");
        step[senderID] = 0;
