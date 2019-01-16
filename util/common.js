@@ -1,10 +1,9 @@
 const jsSHA = require('jssha');
 const moment = require('moment-timezone');
 const config = require('config');
-
 module.exports.getAuthorizationHeader = () => {
-	var AppID = process.env.AppID;
-	var AppKey = process.env.AppKey;
+	var AppID = process.env.AppID || config.AppID;
+	var AppKey = process.env.AppKey || config.AppKey;
     
 	var GMTString = new Date().toGMTString();
 	var ShaObj = new jsSHA('SHA-1', 'TEXT');

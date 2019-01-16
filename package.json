@@ -25,6 +25,8 @@
     "jssha": "^2.3.1",
     "linebot": "^1.4.1",
     "moment": "^2.23.0",
-    "moment-timezone": "^0.5.23"
+    "moment-timezone": "^0.5.23",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0"
   }
 }
