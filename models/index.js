@@ -9,7 +9,7 @@ var basename = path.basename(__filename);
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(CLEARDB_DATABASE_URL, options);
+let sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, options);
 
 fs
     .readdirSync(__dirname)
