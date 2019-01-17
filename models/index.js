@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var Sequelize = require('sequelize-heroku').connect(require('sequelize'));
+var Sequelize = require('sequelize');
 var basename = path.basename(__filename);
 
 // var config = require('config');
@@ -9,7 +9,7 @@ var basename = path.basename(__filename);
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(database, username, password, options);
+let sequelize = new Sequelize(CLEARDB_DATABASE_URL, options);
 
 fs
     .readdirSync(__dirname)
