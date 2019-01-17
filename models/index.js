@@ -3,10 +3,11 @@ var path = require('path');
 var Sequelize = require('sequelize');
 var basename = path.basename(__filename);
 
-var config = require('config');
-const { connection } = config;
-const { database, username, password, options } = connection;
+// var config = require('config');
+// const { connection } = config;
+// const { database, username, password, options } = connection;
 
+const { database, username, password, options } = process.env.Connection;
 var db = {};
 let sequelize = new Sequelize(database, username, password, options);
 
