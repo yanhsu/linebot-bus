@@ -1,5 +1,6 @@
 {
     "production": {
-        "dialect": "mysql",
+        "use_env_variable": "process.env.CLEARDB_DATABASE_URL",
+        "dialect": "mysql"
     }
 }
