@@ -7,9 +7,7 @@ var config = require('config');
 // const { connection } = config;
 // const { database, username, password, options } = connection;
 var http = require("http");
-setInterval(function() {
-    http.get("https://taichungbus.herokuapp.com/");
-}, 600000);
+
 
 var db = {};
 let sequelize;

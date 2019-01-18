@@ -6,7 +6,11 @@ const config = require('config');
 const Service = require('./services');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
-const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common')
+const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
+
+setInterval(function() {
+  http.get("https://taichungbus.herokuapp.com/");
+}, 600000);
 
 let bot = linebot({
     channelId: process.env.ChannelId || channelId,
