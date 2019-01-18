@@ -4,6 +4,7 @@ const bus = require('./bus/route');
 const models = require('./models');
 const config = require('config');
 const Service = require('./services');
+const http = require("http");
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
