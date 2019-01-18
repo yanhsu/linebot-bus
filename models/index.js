@@ -9,7 +9,7 @@ var config = require('config');
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(config.use_env_variable, process.env.username, process.env.password, {
+let sequelize = new Sequelize(process.env.database, process.env.username, process.env.password, {
     host: process.env.host,
     dialect: 'mysql',
     logging: false,
