@@ -1,4 +1,5 @@
 {
     "use_env_variable": "process.env.CLEARDB_DATABASE_URL",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "options": "process.env.Connection.options"
 }

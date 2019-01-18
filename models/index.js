@@ -9,7 +9,7 @@ var config = require('config');
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(config.use_env_variable, username, password, options);
+let sequelize = new Sequelize(config.use_env_variable, username, password, config.option);
 
 fs
     .readdirSync(__dirname)
