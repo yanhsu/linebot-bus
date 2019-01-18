@@ -3,13 +3,13 @@ var path = require('path');
 var Sequelize = require('sequelize');
 var basename = path.basename(__filename);
 
-// var config = require('config');
+var config = require('config');
 // const { connection } = config;
 // const { database, username, password, options } = connection;
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, options);
+let sequelize = new Sequelize(config.use_env_variable, config);
 
 fs
     .readdirSync(__dirname)
