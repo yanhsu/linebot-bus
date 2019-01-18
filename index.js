@@ -14,7 +14,7 @@ let bot = linebot({
     channelAccessToken: process.env.ChannelAccessToken || channelAccessToken
 });
 
-console.log("process env === %O", process.env.Connection.options);
+// console.log("process env === %O", process.env.Connection.options);
  
 var start = {};//查詢是否開始
 var step = {};//查詢到第幾個步驟了
@@ -23,7 +23,8 @@ var searchDirection = {} // 查詢方向
 var searchStop = {}; // 查詢站點
 var branch = {
   "查詢": 1,
-  "設定常用站牌": 2
+  "設定常用站牌": 2,
+  "常用站牌": 5
 };
 bot.on('message', async function(event) {
     const senderID = event.source.userId;
@@ -39,6 +40,9 @@ bot.on('message', async function(event) {
           case 3: await settingMiddleware(msg, senderID, event); // 已有路線詢問設定
           break;
           case 4: await deleteFlow(msg, senderID, event); // 刪除流程
+          break;
+          case 5: await searchByFavorite(msg, senderID, event);// 常用搜尋
+          break;
         }
       } else {
         start[senderID] = branch[msg];
@@ -48,6 +52,8 @@ bot.on('message', async function(event) {
           case 2: await settingRoute(msg, senderID, event);
           break;
           case 3: await settingMiddleware(msg, senderID, event); // 已有路線詢問設定
+          break;
+          case 5: await searchByFavorite(msg, senderID, event);
           break;
         }
       }
@@ -195,8 +201,8 @@ bot.on('message', async function(event) {
     if(!isNaN(msg)) {
       if(msg-1 < 0) {
         await event.reply('已取消，若要重新設定請點選選單')
-        start[senderID] = 0
-        step[senderID] = 0 
+        start[senderID] = 0;
+        step[senderID] = 0;
         return;
       }
       try {
@@ -211,6 +217,52 @@ bot.on('message', async function(event) {
     } else {
       await event.reply('輸入內容不正確。請輸入顯示的數字');
     }
+ }
+
+ async function searchByFavorite(msg, senderID, event) {
+   console.log("常用站牌 ===");
+  let user = await userService.findByLineId(senderID);
+  if(!user) {
+    user = await userService.create({ lineId: senderID });
+  }
+  let favorites = await favoriteService.findByUserId(user.id);
+  if(msg == '常用站牌') {
+    if(favorites.length < 1) {
+      await event.reply('您尚未設定，常用站牌，請至選單設定。');
+      step[senderID] = 0;
+      start[senderID] = 0;
+    } else {
+      let chooseMsg = '請選擇您要查詢的站牌\n\n';
+      for(let i = 1; i <= favorites.length; i++) {
+        const favorite = favorites[i-1];
+        chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
+      }
+      chooseMsg += '\n0.取消';
+      await event.reply(chooseMsg);
+      step[senderID] = 1;
+    }
+  } else if(step[senderID] == 1) {
+    if(!isNaN(msg)) {
+      if(msg-1 < 0) {
+        await event.reply('已取消，若要重新設定請點選選單')
+        start[senderID] = 0;
+        step[senderID] = 0;
+        return;
+      }
+      try {
+        let favorite = favorites[msg-1];
+        let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
+        await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
+        step[senderID] = 0;
+        start[senderID] = 0;
+      } catch(error) {
+        console.log(error);
+        await event.reply('輸入內容不正確。請輸入顯示的數字');
+      }
+    } else {
+      await event.reply('輸入內容不正確。請輸入顯示的數字');
+    }
+  }
  }
   const app = express();
   const linebotParser = bot.parser();

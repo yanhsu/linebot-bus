@@ -35,6 +35,17 @@ class Route {
 			throw error;
 		}
   }
+  async getEstimateTimeByStopId(routeId, direction, stopId) {
+    try {
+			return await axios({
+				url: `https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taichung?$filter=RouteName%2FZh_tw%20eq%20%27${routeId}%27%20and%20Direction%20eq%20%27${direction}%27%20and%20StopID%20eq%20%27${stopId}%27&$format=json`,
+				method: 'get',
+				headers: getAuthorizationHeader(),
+			});
+		} catch (error) {
+			throw error;
+		}
+  }
 }
 function createRoute() {
 	return new Route();
