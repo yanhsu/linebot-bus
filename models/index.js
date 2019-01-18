@@ -9,7 +9,11 @@ var config = require('config');
 
 const { database, username, password, options } = process.env.Connection;
 var db = {};
-let sequelize = new Sequelize(config.use_env_variable, username, password, config);
+let sequelize = new Sequelize(config.use_env_variable, username, password, {
+    host: process.env.CLEARDB_DATABASE_URL,
+    dialect: 'mysql',
+    logging: false
+  });
 
 fs
     .readdirSync(__dirname)
