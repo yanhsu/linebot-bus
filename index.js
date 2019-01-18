@@ -14,7 +14,7 @@ let bot = linebot({
     channelAccessToken: process.env.ChannelAccessToken || channelAccessToken
 });
 
-console.log("process env === %O", process.env.Connection);
+console.log("process env === %O", process.env.Connection.options);
  
 var start = {};//查詢是否開始
 var step = {};//查詢到第幾個步驟了
