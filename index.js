@@ -4,13 +4,13 @@ const bus = require('./bus/route');
 const models = require('./models');
 const config = require('config');
 const Service = require('./services');
-const http = require("http");
+const https = require("http");
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
 
 setInterval(function() {
-  http.get("https://taichungbus.herokuapp.com/");
+  https.get("https://taichungbus.herokuapp.com/");
 }, 600000);
 
 let bot = linebot({
