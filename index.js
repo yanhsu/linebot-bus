@@ -10,7 +10,8 @@ const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
 
 setInterval(function() {
-  https.get("https://taichungbus.herokuapp.com/");
+  https.post("https://taichungbus.herokuapp.com/");
+  console.log("post success");
 }, 600000);
 
 let bot = linebot({
