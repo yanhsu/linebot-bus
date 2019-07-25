@@ -12,7 +12,7 @@ const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/commo
 setInterval(function() {
   https.get("https://taichungbus.herokuapp.com/");
   console.log("get success");
-}, 600000);
+}, 600001);
 
 let bot = linebot({
     channelId: process.env.ChannelId || channelId,
