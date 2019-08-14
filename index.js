@@ -36,7 +36,7 @@ bot.on('message', async function(event) {
     const senderID = event.source.userId;
     console.log(start[senderID]);
     if (event.message.type = 'text') {
-      let msg = event.message.text;
+      let msg = event.message.text.trim();
       if(start[senderID]!=0 && start[senderID]!= undefined) {
         switch(start[senderID]) {
           case 1: await searchButton(msg, senderID, event); // 查詢
@@ -274,7 +274,7 @@ bot.on('message', async function(event) {
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
   
-  var server = app.listen(process.env.PORT || 8080, function() {
+  var server = app.listen(process.env.PORT || 9006, function() {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
