@@ -79,6 +79,10 @@ bot.on('message', async function(event) {
         if(msg.indexOf("回程") >= 0) {
           direction = 1;
         }
+        if(msg.indexOf("取消") >= 0) {
+          start[senderID] = 0, step[senderID] = 0;
+          await event.reply("已取消，若要重新查詢請點選選單");
+        }
         searchDirection[senderID] = direction;
         console.log("direction = %s", direction);
         let res = await bus.getStop(searchRoute[senderID], direction);
@@ -105,7 +109,7 @@ bot.on('message', async function(event) {
       let route = await bus.getRoute(msg);
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back]));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"]));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
