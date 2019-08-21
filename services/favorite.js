@@ -23,7 +23,7 @@ class Favorite {
         return result == 1;
     }
 
-    async updateTimeByUserId(UserId, routeId,time) {
+    async updateTimeByUserIdAndRouteId(UserId, routeId,time) {
         let options = {
             triggerTime: time
         }
