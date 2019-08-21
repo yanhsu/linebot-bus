@@ -177,7 +177,6 @@ bot.on('message', async function(event) {
         stopName: StopName.Zh_tw,
         UserId: user.id
       });
-      await event.reply();
       await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"]));
       // step[senderID] = 0;
       // start[senderID] = 0;
@@ -198,6 +197,7 @@ bot.on('message', async function(event) {
         await event.reply("時間格式錯誤，請重新輸入。");
       }
     } catch(err) {
+      console.log(err);
       await event.reply("發生非預期錯誤，請洽開發人員!!");
     }
   }
