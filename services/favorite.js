@@ -22,6 +22,25 @@ class Favorite {
         let result = await models.Favorite.destroy(options);
         return result == 1;
     }
+
+    async updateTimeByUserId(UserId, time) {
+        let options = {
+            triggerTime: time
+        }
+        let result = await models.Favorite.update(options, { where: { UserId: UserId }});
+        return result;
+    }
+    
+    async findByTriggerTime(time) {
+        let options = {
+            where: {
+                triggerTime: time
+            },
+            include: [ { model: User, where: { UserId: User.id} }]
+        };
+        let favorites = await models.Favorite.findAll(options);
+        return favorites;
+    }
 }
 
 module.exports = Favorite;

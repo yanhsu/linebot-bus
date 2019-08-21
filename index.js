@@ -90,6 +90,16 @@ bot.on('message', async function(event) {
         await event.reply("請選擇查詢車站，輸入前方號碼即可查詢。\n\n"+stops);
         step[senderID] = 3;
       }
+      if(step[senderID] == 4) {
+        if(msg.indexOf("是") >= 0) {
+          await event.reply(`請輸入時間(24小時制)\n example1: 07:11 \n example2: 20:19`);
+          step[senderID] = 5;
+        } else {
+          await event.reply(`感謝您的使用\n 若要重新查詢請按下方選單`);
+          start[senderID] = 0;
+          step[senderID] = 0;
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -164,11 +174,27 @@ bot.on('message', async function(event) {
         UserId: user.id
       });
       await event.reply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌`);
-      step[senderID] = 0;
-      start[senderID] = 0;
+      await event.reply(formatQuickReply("是否開啟定時推播",["是","否"]));
+      // step[senderID] = 0;
+      // start[senderID] = 0;
+      step[senderID] = 4;
     } catch (error) {
       console.log(error);
       await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
+    }
+  } else if(step[senderID] == 5) {
+    try {
+      if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(msg)) {
+        let user = await userService.findByLineId(senderID);
+        let favorite = await favoriteService.updateTimeByUserId(user.id,  msg);
+        let test = await favoriteService.findByTriggerTime("07:00");
+        console.log("list %O", test);
+        await event.reply("設定完成\n 若要重新設定請點選下方選單。");
+      } else {
+        await event.reply("時間格式錯誤，請重新輸入。");
+      }
+    } catch(err) {
+      await event.reply("發生非預期錯誤，請洽開發人員!!");
     }
   }
  }

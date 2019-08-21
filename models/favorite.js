@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.INTEGER
         },
-        stopName: DataTypes.STRING
+        stopName: DataTypes.STRING,
+        triggerTime: DataTypes.STRING
     });
     Favorite.associate = function (models) {
         Favorite.belongsTo(models.User);
