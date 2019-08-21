@@ -191,7 +191,7 @@ bot.on('message', async function(event) {
         let user = await userService.findByLineId(senderID);
         let favorite = await favoriteService.updateTimeByUserId(user.id,  msg);
         let test = await favoriteService.findByTriggerTime("07:00");
-        console.log("list %O", test);
+        console.log("list"+test.length);
         await event.reply("設定完成\n 若要重新設定請點選下方選單。");
       } else {
         await event.reply("時間格式錯誤，請重新輸入。");
