@@ -36,7 +36,7 @@ class Favorite {
             where: {
                 triggerTime: time
             },
-            include: [ { model: models.User, where: { UserId: User.id} }]
+            include: [ { model: "User", where: { UserId: "User.id"} }]
         };
         let favorites = await models.Favorite.findAll(options);
         return favorites;
