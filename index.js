@@ -177,8 +177,8 @@ bot.on('message', async function(event) {
         stopName: StopName.Zh_tw,
         UserId: user.id
       });
-      await event.reply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌`);
-      await event.reply(formatQuickReply("是否開啟定時推播",["是","否"]));
+      await event.reply();
+      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"]));
       // step[senderID] = 0;
       // start[senderID] = 0;
       step[senderID] = 4;
