@@ -12,7 +12,7 @@ const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/commo
 setInterval(function() {
   https.get("https://taichungbus.herokuapp.com/");
   console.log("get success");
-}, 600000);
+}, 600001);
 
 let bot = linebot({
     channelId: process.env.ChannelId || channelId,
@@ -36,7 +36,7 @@ bot.on('message', async function(event) {
     const senderID = event.source.userId;
     console.log(start[senderID]);
     if (event.message.type = 'text') {
-      let msg = event.message.text;
+      let msg = event.message.text.trim();
       if(start[senderID]!=0 && start[senderID]!= undefined) {
         switch(start[senderID]) {
           case 1: await searchButton(msg, senderID, event); // 查詢
@@ -79,6 +79,10 @@ bot.on('message', async function(event) {
         if(msg.indexOf("回程") >= 0) {
           direction = 1;
         }
+        if(msg.indexOf("取消") >= 0) {
+          start[senderID] = 0, step[senderID] = 0;
+          await event.reply("已取消，若要重新查詢請點選選單");
+        }
         searchDirection[senderID] = direction;
         console.log("direction = %s", direction);
         let res = await bus.getStop(searchRoute[senderID], direction);
@@ -115,7 +119,7 @@ bot.on('message', async function(event) {
       let route = await bus.getRoute(msg);
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back]));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"]));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
@@ -300,7 +304,7 @@ bot.on('message', async function(event) {
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
   
-  var server = app.listen(process.env.PORT || 8080, function() {
+  var server = app.listen(process.env.PORT || 9006, function() {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
