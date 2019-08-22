@@ -173,7 +173,8 @@ bot.on('message', async function(event) {
       let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
       const { StopName, StopID } = res.data[0];
       console.log(res.data[0]);
-      favorite[senderID] = await favoriteService.create({
+
+      favoriteId[senderID] = await favoriteService.create({
         routeId: searchRoute[senderID],
         direction: searchDirection[senderID],
         stopId: StopID,
@@ -191,8 +192,8 @@ bot.on('message', async function(event) {
   } else if(step[senderID] == 5) {
     try {
       if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(msg)) {
-        await favoriteService.updateTimeByFavoriteId(favorite[senderID].id,  msg);
-        console.log("favoriteId =>" +favorite[senderID].id);
+        await favoriteService.updateTimeByFavoriteId(favoriteId[senderID].id,  msg);
+        console.log("favoriteId =>" +favorite[senderID];
         await event.reply("設定完成\n 若要重新設定請點選下方選單。");
       } else {
         await event.reply("時間格式錯誤，請重新輸入。");
