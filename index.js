@@ -300,7 +300,7 @@ bot.on('message', async function(event) {
     }
   }
  }
- cron.schedule('*/1 * * * *', () => {
+ cron.schedule('*/1 * * * *', async () => {
   const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
   const favorites = await favoriteService.findByTriggerTime(timeNow);
   for(let favorite of favorites) {
