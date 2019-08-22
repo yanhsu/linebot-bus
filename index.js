@@ -29,7 +29,7 @@ var step = {};//查詢到第幾個步驟了
 var searchRoute = {}; // 查詢路線
 var searchDirection = {} // 查詢方向
 var searchStop = {}; // 查詢站點
-var favoriteId = {}; // 常用站牌ID
+var favorite = {}; // 常用站牌ID
 var branch = {
   "查詢": 1,
   "設定常用站牌": 2,
@@ -173,7 +173,7 @@ bot.on('message', async function(event) {
       let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
       const { StopName, StopID } = res.data[0];
       console.log(res.data[0]);
-      favoriteId[senderID] = await favoriteService.create({
+      favorite[senderID] = await favoriteService.create({
         routeId: searchRoute[senderID],
         direction: searchDirection[senderID],
         stopId: StopID,
@@ -191,7 +191,7 @@ bot.on('message', async function(event) {
   } else if(step[senderID] == 5) {
     try {
       if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(msg)) {
-        await favoriteService.updateTimeByFavoriteId(favoriteId[senderID],  msg);
+        await favoriteService.updateTimeByFavoriteId(favorite[senderID].id,  msg);
         await event.reply("設定完成\n 若要重新設定請點選下方選單。");
       } else {
         await event.reply("時間格式錯誤，請重新輸入。");
@@ -303,7 +303,6 @@ bot.on('message', async function(event) {
  cron.schedule('*/1 * * * *', async () => {
   const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
   const favorites = await favoriteService.findByTriggerTime(toString(timeNow));
-  console.log("test %O", await favoriteService.findByUserId(1));
   console.log("timenow =>" + timeNow);
   console.log("favorites =>" + favorites);
   for(let favorite of favorites) {
