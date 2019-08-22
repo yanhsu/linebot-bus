@@ -193,7 +193,6 @@ bot.on('message', async function(event) {
     try {
       if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(msg)) {
         await favoriteService.updateTimeByFavoriteId(favoriteId[senderID].id,  msg);
-        console.log("favoriteId =>" +favorite[senderID]);
         await event.reply("設定完成\n 若要重新設定請點選下方選單。");
       } else {
         await event.reply("時間格式錯誤，請重新輸入。");
