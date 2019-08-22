@@ -306,7 +306,7 @@ bot.on('message', async function(event) {
   const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
   const favorites = await favoriteService.findByTriggerTime(timeNow);
   console.log("test %O", await favoriteService.findByUserId(1));
-  console.log("timenow =>" + toString(timeNow) == "20:16");
+  console.log("timenow =>"+ timeNow + (timeNow == "20:21"));
   console.log("favorites =>" + favorites);
   for(let favorite of favorites) {
     let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
