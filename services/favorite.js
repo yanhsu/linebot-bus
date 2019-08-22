@@ -23,11 +23,11 @@ class Favorite {
         return result == 1;
     }
 
-    async updateTimeByUserIdAndRouteId(UserId, routeId,time) {
+    async updateTimeByFavoriteId(favoriteId, time) {
         let options = {
             triggerTime: time
         }
-        let result = await models.Favorite.update(options, { where: { UserId: UserId, routeId }});
+        let result = await models.Favorite.update(options, { where: { id: favoriteId }});
         return result;
     }
     

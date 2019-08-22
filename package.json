@@ -25,8 +25,9 @@
     "jssha": "^2.3.1",
     "linebot": "^1.4.1",
     "moment": "^2.23.0",
-    "moment-timezone": "^0.5.23",
+    "moment-timezone": "^0.5.26",
     "mysql2": "^1.6.4",
+    "node-cron": "^2.0.3",
     "sequelize": "^5.0.0-beta.11",
     "sequelize-heroku": "^2.0.0"
   }

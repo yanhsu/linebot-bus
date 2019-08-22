@@ -5,6 +5,8 @@ const models = require('./models');
 const config = require('config');
 const Service = require('./services');
 const https = require("https");
+const cron = require('node-cron');
+const moment = require('moment-timezone');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
@@ -27,6 +29,7 @@ var step = {};//查詢到第幾個步驟了
 var searchRoute = {}; // 查詢路線
 var searchDirection = {} // 查詢方向
 var searchStop = {}; // 查詢站點
+var favoriteId = {}; // 常用站牌ID
 var branch = {
   "查詢": 1,
   "設定常用站牌": 2,
@@ -170,7 +173,7 @@ bot.on('message', async function(event) {
       let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
       const { StopName, StopID } = res.data[0];
       console.log(res.data[0]);
-      await favoriteService.create({
+      favoriteId[senderID] = await favoriteService.create({
         routeId: searchRoute[senderID],
         direction: searchDirection[senderID],
         stopId: StopID,
@@ -188,10 +191,7 @@ bot.on('message', async function(event) {
   } else if(step[senderID] == 5) {
     try {
       if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(msg)) {
-        let user = await userService.findByLineId(senderID);
-        let favorite = await favoriteService.updateTimeByUserIdAndRouteId(user.id, searchRoute[senderID],  msg);
-        let test = await favoriteService.findByTriggerTime("07:00");
-        console.log("list"+test[0].User.id);
+        await favoriteService.updateTimeByFavoriteId(favoriteId[senderID],  msg);
         await event.reply("設定完成\n 若要重新設定請點選下方選單。");
       } else {
         await event.reply("時間格式錯誤，請重新輸入。");
@@ -300,6 +300,17 @@ bot.on('message', async function(event) {
     }
   }
  }
+ cron.schedule('*/1 * * * *', () => {
+  const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
+  const favorites = await favoriteService.findByTriggerTime(timeNow);
+  for(let favorite of favorites) {
+    let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
+    const msg = formatEstimatedTimeOfArrival(res.data[0]);
+    bot.push(favorite.User.lineId, msg);
+  }
+
+  console.log('running on every minute');
+});
   const app = express();
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
