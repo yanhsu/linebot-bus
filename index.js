@@ -304,9 +304,9 @@ bot.on('message', async function(event) {
  }
  cron.schedule('*/1 * * * *', async () => {
   const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
-  const favorites = await favoriteService.findByTriggerTime(toString(timeNow));
+  const favorites = await favoriteService.findByTriggerTime(timeNow);
   console.log("test %O", await favoriteService.findByUserId(1));
-  console.log("timenow =>" + timeNow);
+  console.log("timenow =>" + timeNow == "20:13");
   console.log("favorites =>" + favorites);
   for(let favorite of favorites) {
     let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
