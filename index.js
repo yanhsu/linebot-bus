@@ -176,7 +176,7 @@ bot.on('message', async function(event) {
       let route = await bus.getRoute(msg);
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back], 'postback','button'));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back], 'postback','buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
