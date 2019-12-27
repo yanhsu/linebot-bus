@@ -137,7 +137,7 @@ bot.on('message', async function(event) {
       let route = await bus.getRoute(msg);
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"]));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], 'postback', 'buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
@@ -196,7 +196,7 @@ bot.on('message', async function(event) {
         stopName: StopName.Zh_tw,
         UserId: user.id
       });
-      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"]));
+      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
       // step[senderID] = 0;
       // start[senderID] = 0;
       step[senderID] = 4;
