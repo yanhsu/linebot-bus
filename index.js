@@ -100,7 +100,7 @@ bot.on('message', async function(event) {
       if(step[senderID] == 4) {
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
-          await event.reply(formatQuickReply("請選擇時間",[go], 'datetimepicker','button'));
+          await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','button'));
           step[senderID] = 5;
         } else {
           await event.reply(`感謝您的使用\n 若要重新查詢請按下方選單`);
