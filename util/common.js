@@ -15,11 +15,11 @@ module.exports.getAuthorizationHeader = () => {
 	return { 'Authorization': Authorization, 'X-Date': GMTString};
 };
 
-module.exports.formatQuickReply = (title, replies) => {
+module.exports.formatQuickReply = (title, replies, actionType, templateType) => {
   let actions = [];
   for(let reply of replies) {
     actions.push({
-      type: 'postback',
+      type: actionType,
       label: reply,
       data: reply
     })
@@ -28,13 +28,14 @@ module.exports.formatQuickReply = (title, replies) => {
     type: 'template',
     altText: title,
     template: {
-      type: 'buttons',
+      type: templateType,
       text: title,
       actions: actions
     }
   }
   return message;
 }
+
 
 module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
   const {

@@ -99,12 +99,27 @@ bot.on('message', async function(event) {
       }
       if(step[senderID] == 4) {
         if(msg.indexOf("是") >= 0) {
-          await event.reply(`請輸入時間(24小時制)\n example1: 07:11 \n example2: 20:19`);
+          let replyButton = "點擊選取時間";
+          await event.reply(formatQuickReply("請選擇時間",[go], 'datetimepicker','button'));
           step[senderID] = 5;
         } else {
           await event.reply(`感謝您的使用\n 若要重新查詢請按下方選單`);
           start[senderID] = 0;
           step[senderID] = 0;
+        }
+      }
+      if(step[senderID] == 5) {
+        let time = event.postback.params.time;
+        try {
+          if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(time)) {
+            await favoriteService.updateTimeByFavoriteId(favoriteId[senderID].id,  time);
+            await event.reply("設定完成\n 若要重新設定請點選下方選單。");
+          } else {
+            await event.reply("時間格式錯誤，請重新輸入。");
+          }
+        } catch(err) {
+          console.log(err);
+          await event.reply("發生非預期錯誤，請洽開發人員!!");
         }
       }
     } catch (error) {
@@ -161,7 +176,7 @@ bot.on('message', async function(event) {
       let route = await bus.getRoute(msg);
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back]));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back], 'postback','button'));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
