@@ -21,7 +21,8 @@ module.exports.formatQuickReply = (title, replies, actionType, templateType) => 
     actions.push({
       type: actionType,
       label: reply,
-      data: reply
+      data: reply,
+      mode: 'time'
     })
   }
 	let message = {
