@@ -64,6 +64,11 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
 }
 
 module.exports.formatFlexMessage = (title, stops) => {
+  const flexTemplate = {
+    "type": "flex",
+    "altText": "台中等公車",
+    "contents": null
+  }
   let template = {
     "type": "bubble",
     "body": {
@@ -92,5 +97,6 @@ module.exports.formatFlexMessage = (title, stops) => {
       }
     });
   }
-  return template;
+  flexTemplate.contents = template;
+  return flexTemplate;
 }
