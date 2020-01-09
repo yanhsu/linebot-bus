@@ -62,3 +62,35 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
     return `車號 ${PlateNumb}\n 將在${min}分鐘後抵達`
   }
 }
+
+module.exports.formatFlexMessage = (title, stops) => {
+  let template = {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "contents": [
+        {
+          "type": "text",
+          "text": title,
+          "weight": "bold",
+          "color": "#1DB446",
+          "size": "sm"
+        },
+      ]
+    }
+  }
+  for(let stop of stops) {
+    template.body.contents.push({
+      "type": "button",
+      "style": "primary",
+      "action": {
+        "type": "postback",
+        "label": stop.StopName.Zh_tw,
+        "data": stop.StopSequence
+      }
+    });
+  }
+  return template;
+}

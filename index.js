@@ -9,7 +9,7 @@ const cron = require('node-cron');
 const moment = require('moment-timezone');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
-const { formatQuickReply, formatEstimatedTimeOfArrival } = require('./util/common');
+const { formatQuickReply, formatEstimatedTimeOfArrival, formatFlexMessage } = require('./util/common');
 
 setInterval(function() {
   https.get("https://taichungbus.herokuapp.com/");
@@ -91,11 +91,21 @@ bot.on('message', async function(event) {
         let res = await bus.getStop(searchRoute[senderID], direction);
 
         let stops = "";
-        for(let stop of res.data[0].Stops) {
-          stops = stops + `${stop.StopSequence}. ${stop.StopName.Zh_tw}\n`
-        }
-        await event.reply("請選擇查詢車站，輸入前方號碼即可查詢。\n\n"+stops);
+        // for(let stop of res.data[0].Stops) {
+        //   stops = stops + `${stop.StopSequence}. ${stop.StopName.Zh_tw}\n`
+        // }
+        await event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
         step[senderID] = 3;
+      }
+      if (step[senderID] == 3) {
+        try {
+          let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
+          await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
+          step[senderID] = 0;
+          start[senderID] = 0;
+        } catch (error) {
+          await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
+        }
       }
       if(step[senderID] == 4) {
         if(msg.indexOf("是") >= 0) {
