@@ -94,6 +94,7 @@ bot.on('message', async function(event) {
         // for(let stop of res.data[0].Stops) {
         //   stops = stops + `${stop.StopSequence}. ${stop.StopName.Zh_tw}\n`
         // }
+        console.log("stop msg= %o", formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
         await event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
         step[senderID] = 3;
       }
