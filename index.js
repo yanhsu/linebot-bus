@@ -90,11 +90,7 @@ bot.on('message', async function(event) {
         console.log("direction = %s", direction);
         let res = await bus.getStop(searchRoute[senderID], direction);
 
-        let stops = "";
-        // for(let stop of res.data[0].Stops) {
-        //   stops = stops + `${stop.StopSequence}. ${stop.StopName.Zh_tw}\n`
-        // }
-        console.log("stop msg= %o", formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+
         bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
         step[senderID] = 3;
       }
@@ -156,15 +152,6 @@ bot.on('message', async function(event) {
     } catch (error) {
       console.log(error);
       await event.reply("您所輸入的路線不存在，請重新輸入");
-    }
-  } else if (step[senderID] == 3) {
-    try {
-      let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
-      await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
-      step[senderID] = 0;
-      start[senderID] = 0;
-    } catch (error) {
-      await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
     }
   }
  }
