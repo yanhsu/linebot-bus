@@ -1,6 +1,7 @@
 const jsSHA = require('jssha');
 const moment = require('moment-timezone');
 const config = require('config');
+
 module.exports.getAuthorizationHeader = () => {
 	var AppID = process.env.AppID || config.AppID;
 	var AppKey = process.env.AppKey || config.AppKey;
@@ -63,7 +64,7 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
   }
 }
 
-module.exports.formatFlexMessage = (title, stops) => {
+module.exports.formatFlexMessage = (title, stops, label, data) => {
   const flexTemplate = {
     "type": "flex",
     "altText": "台中等公車",
@@ -81,19 +82,19 @@ module.exports.formatFlexMessage = (title, stops) => {
           "text": title,
           "weight": "bold",
           "color": "#1DB446",
-          "size": "sm"
+          "size": "md"
         },
       ]
     }
   }
-  for(let stop of stops) {
+  for(let [i,stop] of stops.entities()) {
     template.body.contents.push({
       "type": "button",
-      "style": "primary",
+      "style": i%2 ?"primary": "secondary",
       "action": {
         "type": "postback",
-        "label": stop.StopName.Zh_tw,
-        "data": stop.StopSequence
+        "label": stop[label],
+        "data": stop[data]
       }
     });
   }
