@@ -87,7 +87,7 @@ module.exports.formatFlexMessage = (title, stops, label, data) => {
       ]
     }
   }
-  for(let [i,stop] of stops.entities()) {
+  for(let [i,stop] of stops.entries()) {
     template.body.contents.push({
       "type": "button",
       "style": i%2 ?"primary": "secondary",
