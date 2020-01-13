@@ -64,7 +64,7 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
   }
 }
 
-module.exports.formatFlexMessage = (title, stops, label, data) => {
+module.exports.formatFlexMessage = (title, stops) => {
   const flexTemplate = {
     "type": "flex",
     "altText": "台中等公車",
@@ -93,8 +93,8 @@ module.exports.formatFlexMessage = (title, stops, label, data) => {
       "style": i%2 ?"primary": "secondary",
       "action": {
         "type": "postback",
-        "label": stop[label],
-        "data": stop[data]
+        "label": stop.StopName.Zh_tw,
+        "data": stop.StopSequence
       }
     });
   }

@@ -91,7 +91,7 @@ bot.on('message', async function(event) {
         let res = await bus.getStop(searchRoute[senderID], direction);
 
 
-        await bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops, "StopName.Zh_tw", "StopSequence"));
+        await bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
         step[senderID] = 3;
       }
       if (step[senderID] == 3) {
