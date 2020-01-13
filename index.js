@@ -90,8 +90,14 @@ bot.on('message', async function(event) {
         console.log("direction = %s", direction);
         let res = await bus.getStop(searchRoute[senderID], direction);
 
-
-        await bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+        await new Promise(function (resolve, reject) {
+          try {
+            bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+            resolve
+          } catch (err) {
+            reject(err)
+          }
+        })
         step[senderID] = 3;
       }
       if (step[senderID] == 3) {
