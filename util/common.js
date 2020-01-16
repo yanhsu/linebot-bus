@@ -154,9 +154,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
           ]
         }
       ],
+      "paddingAll": "10px",
       "backgroundColor": "#10E000",
-      "spacing": "md",
-      "height": "40px"
+      "spacing": "md"
     },
     "body": {
       "type": "box",
@@ -171,7 +171,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     "contents": null
   }
   for(let [i,stop] of stops.entries()) {
-    if( i < 4) {
+    if( i < 7) {
       template.body.contents.push(
         {
           "type": "box",
