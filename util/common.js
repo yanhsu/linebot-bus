@@ -171,7 +171,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     "contents": null
   }
   for(let [i,stop] of stops.entries()) {
-    if( i < 9) {
+    if( i < 11) {
       template.body.contents.push(
         {
           "type": "box",
