@@ -165,7 +165,11 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       ]
     }
   }
-
+  const flexTemplate = {
+    "type": "flex",
+    "altText": "台中等公車",
+    "contents": null
+  }
   for(let [i,stop] of stops.entries()) {
     template.body.contents.push(
       {
@@ -296,4 +300,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       );
     }
   }
+
+  flexTemplate.contents.push(template);
+  return flexTemplate;
 }
