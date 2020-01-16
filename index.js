@@ -9,7 +9,7 @@ const cron = require('node-cron');
 const moment = require('moment-timezone');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
-const { formatQuickReply, formatEstimatedTimeOfArrival, formatFlexMessage } = require('./util/common');
+const { formatQuickReply, formatEstimatedTimeOfArrival, formatFlexMessage,formatBusFlexMessage } = require('./util/common');
 
 setInterval(function() {
   https.get("https://taichungbus.herokuapp.com/");
@@ -90,11 +90,11 @@ bot.on('message', async function(event) {
         console.log("direction = %s", direction);
         // let res = await bus.getStop(searchRoute[senderID], direction);
         let res = await  bus.getAllEstimateTimeByRouteId(searchRoute[senderID], direction);
-        console.log("res => %O",res);
+        console.log("res => %O",res.data);
         try {
           await new Promise(function (resolve, reject) {
             try {
-              event.reply(formatBusFlexMessage(searchRoute[senderID],res.data[0].Stops));
+              event.reply(formatBusFlexMessage(searchRoute[senderID],res.data));
               resolve();
 
             } catch (err) {
