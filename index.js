@@ -94,11 +94,12 @@ bot.on('message', async function(event) {
             try {
               event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
               resolve();
-              step[senderID] = 3;
+
             } catch (err) {
               reject(err)
             }
           });
+          step[senderID] = 3;
         } catch(err) {
           console.log("err => %s", err);
           await event.reply("發生錯誤，請與偷懶的開發人員連繫");
