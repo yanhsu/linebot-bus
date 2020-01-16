@@ -92,7 +92,7 @@ bot.on('message', async function(event) {
 
         await new Promise(function (resolve, reject) {
           try {
-            bot.push(senderID,formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+            event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
             resolve
           } catch (err) {
             reject(err)
