@@ -90,10 +90,10 @@ bot.on('message', async function(event) {
         console.log("direction = %s", direction);
         // let res = await bus.getStop(searchRoute[senderID], direction);
         let res = await  bus.getAllEstimateTimeByRouteId(searchRoute[senderID], direction);
-        console.log("res => %O",res.data);
         try {
           await new Promise(function (resolve, reject) {
             try {
+              console.log("flex => %O",formatBusFlexMessage(searchRoute[senderID],res.data));
               event.reply(formatBusFlexMessage(searchRoute[senderID],res.data));
               resolve();
 
