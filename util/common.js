@@ -222,84 +222,84 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
           "cornerRadius": "30px"
         },
       );
-      if (i != stops.length - 1) {
-        template.body.contents.push(
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                      {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 3
-                      },
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "box",
-                            "layout": "horizontal",
-                            "contents": [
-                              {
-                                "type": "filler",
-                                "flex": 8
-                              },
-                              {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                  {
-                                    "type": "text",
-                                    "text": " "
-                                  }
-                                ],
-                                "backgroundColor": "#000000",
-                                "flex": 1
-                              },
-                              {
-                                "type": "filler",
-                                "flex": 11
-                              }
-                            ]
-                          }
-                        ],
-                        "flex": 1
-                      },
-                      {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 7
-                      }
-                    ],
-                    "flex": 1
-                  }
-                ]
-              }
-            ],
-            "spacing": "lg",
-            "height": "19px"
-          }
-        );
-      }
+      // if (i != stops.length - 1) {
+      //   template.body.contents.push(
+      //     {
+      //       "type": "box",
+      //       "layout": "horizontal",
+      //       "contents": [
+      //         {
+      //           "type": "box",
+      //           "layout": "vertical",
+      //           "contents": [
+      //             {
+      //               "type": "box",
+      //               "layout": "horizontal",
+      //               "contents": [
+      //                 {
+      //                   "type": "box",
+      //                   "layout": "baseline",
+      //                   "contents": [
+      //                     {
+      //                       "type": "filler"
+      //                     }
+      //                   ],
+      //                   "flex": 3
+      //                 },
+      //                 {
+      //                   "type": "box",
+      //                   "layout": "horizontal",
+      //                   "contents": [
+      //                     {
+      //                       "type": "box",
+      //                       "layout": "horizontal",
+      //                       "contents": [
+      //                         {
+      //                           "type": "filler",
+      //                           "flex": 8
+      //                         },
+      //                         {
+      //                           "type": "box",
+      //                           "layout": "baseline",
+      //                           "contents": [
+      //                             {
+      //                               "type": "text",
+      //                               "text": " "
+      //                             }
+      //                           ],
+      //                           "backgroundColor": "#000000",
+      //                           "flex": 1
+      //                         },
+      //                         {
+      //                           "type": "filler",
+      //                           "flex": 11
+      //                         }
+      //                       ]
+      //                     }
+      //                   ],
+      //                   "flex": 1
+      //                 },
+      //                 {
+      //                   "type": "box",
+      //                   "layout": "baseline",
+      //                   "contents": [
+      //                     {
+      //                       "type": "filler"
+      //                     }
+      //                   ],
+      //                   "flex": 7
+      //                 }
+      //               ],
+      //               "flex": 1
+      //             }
+      //           ]
+      //         }
+      //       ],
+      //       "spacing": "lg",
+      //       "height": "19px"
+      //     }
+      //   );
+      // }
     }
 
   }
