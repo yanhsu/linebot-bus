@@ -149,13 +149,12 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
               "weight": "bold",
               "align": "center",
               "gravity": "center",
-              "position": "relative",
               "wrap": false
             }
           ]
         }
       ],
-      "paddingAll": "20px",
+      "paddingAll": "2px",
       "backgroundColor": "#10E000",
       "spacing": "md",
       "height": "50px"
