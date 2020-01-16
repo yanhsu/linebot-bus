@@ -96,12 +96,11 @@ bot.on('message', async function(event) {
               console.log("flex => %s",JSON.stringify(formatBusFlexMessage(searchRoute[senderID],res.data)));
               event.reply(formatBusFlexMessage(searchRoute[senderID],res.data));
               resolve();
-
+              step[senderID] = 3;
             } catch (err) {
               reject(err)
             }
           });
-          step[senderID] = 3;
         } catch(err) {
           console.log("err => %s", err);
           await event.reply("發生錯誤，請與偷懶的開發人員連繫");
