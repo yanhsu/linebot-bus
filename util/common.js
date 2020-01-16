@@ -123,7 +123,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       return "今日未營運"
     } else if (PlateNumb == -1 || !PlateNumb) {
       return `${nextTime}`
-    } else {
+    } else if(EstimateTime == 0){
+      return `進站中`
+    }else {
       return `${min}分鐘後抵達`
     }
   }
