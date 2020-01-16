@@ -93,7 +93,7 @@ bot.on('message', async function(event) {
         try {
           await new Promise(function (resolve, reject) {
             try {
-              console.log("flex => %O",formatBusFlexMessage(searchRoute[senderID],res.data));
+              console.log("flex => %s",JSON.stringify(formatBusFlexMessage(searchRoute[senderID],res.data)));
               event.reply(formatBusFlexMessage(searchRoute[senderID],res.data));
               resolve();
 
