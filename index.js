@@ -93,15 +93,16 @@ bot.on('message', async function(event) {
         await new Promise(function (resolve, reject) {
           try {
             event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
-            resolve
+            resolve();
+            step[senderID] = 3;
           } catch (err) {
             reject(err)
           }
         })
-        step[senderID] = 3;
       }
       if (step[senderID] == 3) {
         try {
+          console.log("step3 = %o", event);
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
           await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
           step[senderID] = 0;
