@@ -301,6 +301,6 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     }
   }
 
-  flexTemplate.contents.push(template);
+  flexTemplate.contents = template;
   return flexTemplate;
 }
