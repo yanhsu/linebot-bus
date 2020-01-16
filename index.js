@@ -89,16 +89,21 @@ bot.on('message', async function(event) {
         searchDirection[senderID] = direction;
         console.log("direction = %s", direction);
         let res = await bus.getStop(searchRoute[senderID], direction);
+        try {
+          await new Promise(function (resolve, reject) {
+            try {
+              event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+              resolve();
+              step[senderID] = 3;
+            } catch (err) {
+              reject(err)
+            }
+          });
+        } catch(err) {
+          console.log("err => %s", err);
+          await event.reply("發生錯誤，請與偷懶的開發人員連繫");
+        }
 
-        await new Promise(function (resolve, reject) {
-          try {
-            event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
-            resolve();
-            step[senderID] = 3;
-          } catch (err) {
-            reject(err)
-          }
-        })
       }
       if (step[senderID] == 3) {
         try {
