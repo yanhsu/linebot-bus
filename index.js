@@ -88,11 +88,13 @@ bot.on('message', async function(event) {
         }
         searchDirection[senderID] = direction;
         console.log("direction = %s", direction);
-        let res = await bus.getStop(searchRoute[senderID], direction);
+        // let res = await bus.getStop(searchRoute[senderID], direction);
+        let res = await  bus.getAllEstimateTimeByRouteId(searchRoute[senderID], direction);
+        console.log("res => %O",res);
         try {
           await new Promise(function (resolve, reject) {
             try {
-              event.reply(formatFlexMessage("請選擇查詢站牌",res.data[0].Stops));
+              event.reply(formatBusFlexMessage(searchRoute[senderID],res.data[0].Stops));
               resolve();
 
             } catch (err) {
@@ -106,17 +108,17 @@ bot.on('message', async function(event) {
         }
 
       }
-      if (step[senderID] == 3) {
-        try {
-          console.log("step3 = %o", event);
-          let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
-          await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
-          step[senderID] = 0;
-          start[senderID] = 0;
-        } catch (error) {
-          await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
-        }
-      }
+      // if (step[senderID] == 3) {
+      //   try {
+      //     console.log("step3 = %o", event);
+      //     let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
+      //     await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
+      //     step[senderID] = 0;
+      //     start[senderID] = 0;
+      //   } catch (error) {
+      //     await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
+      //   }
+      // }
       if(step[senderID] == 4) {
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
@@ -156,7 +158,7 @@ bot.on('message', async function(event) {
     await event.reply('歡迎使用台中公車查詢系統\n請輸入要查詢的路線號碼');
   } else if (step[senderID] == 1) {
     try {
-      let route = await bus.getRoute(msg);
+      let route = await bus.getRoute(msg.trim());
       let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
       await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], 'postback', 'buttons'));

@@ -101,3 +101,199 @@ module.exports.formatFlexMessage = (title, stops) => {
   flexTemplate.contents = template;
   return flexTemplate;
 }
+
+module.exports.formatBusFlexMessage = (routeName, stops) => {
+  formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
+    const {
+      PlateNumb,
+      EstimateTime,
+      StopStatus,
+      NextBusTime
+    } = estimatedTimeOfArrival;
+    let min;
+    if (EstimateTime > 0) {
+      min = EstimateTime / 60;
+    }
+    let nextTime = moment(NextBusTime).tz("Asia/Taipei").format("HH:mm");
+    if (StopStatus == 2) {
+      return "交管不停靠"
+    } else if (StopStatus == 3) {
+      return "末班車已駛離"
+    } else if (StopStatus == 4) {
+      return "今日未營運"
+    } else if (PlateNumb == -1 || !PlateNumb) {
+      return `${nextTime}`
+    } else {
+      return `${min}分鐘後抵達`
+    }
+  }
+  let template = {
+    "type": "bubble",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": `${routeName} 往${stops[stops.length - 1].StopName.Zh_tw}`,
+              "color": "#666666",
+              "size": "lg",
+              "decoration": "none",
+              "style": "normal",
+              "weight": "bold",
+              "align": "center",
+              "gravity": "center",
+              "position": "relative",
+              "wrap": false
+            }
+          ]
+        }
+      ],
+      "paddingAll": "20px",
+      "backgroundColor": "#10E000",
+      "spacing": "md",
+      "height": "50px"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+      ]
+    }
+  }
+
+  for(let [i,stop] of stops.entries()) {
+    template.body.contents.push(
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": formatEstimatedTimeOfArrival(stop),
+            "size": "sm",
+            "flex": 2
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "filler"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "filler"
+                  }
+                ],
+                "cornerRadius": "20px",
+                "width": "13px",
+                "height": "13px",
+                "borderColor": "#FF2200",
+                "borderWidth": "2px"
+              },
+              {
+                "type": "filler"
+              }
+            ],
+            "flex": 1
+          },
+          {
+            "type": "text",
+            "text": stop.StopName.Zh_tw,
+            "gravity": "center",
+            "flex": 7,
+            "size": "sm"
+          }
+        ],
+        "spacing": "md",
+        "cornerRadius": "30px"
+      },
+    );
+    if (i != stops.length - 1) {
+      template.body.contents.push(
+        {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "box",
+                      "layout": "baseline",
+                      "contents": [
+                        {
+                          "type": "filler"
+                        }
+                      ],
+                      "flex": 2
+                    },
+                    {
+                      "type": "box",
+                      "layout": "horizontal",
+                      "contents": [
+                        {
+                          "type": "box",
+                          "layout": "horizontal",
+                          "contents": [
+                            {
+                              "type": "filler",
+                              "flex": 8
+                            },
+                            {
+                              "type": "box",
+                              "layout": "baseline",
+                              "contents": [
+                                {
+                                  "type": "text",
+                                  "text": " "
+                                }
+                              ],
+                              "backgroundColor": "#000000",
+                              "flex": 1
+                            },
+                            {
+                              "type": "filler",
+                              "flex": 11
+                            }
+                          ]
+                        }
+                      ],
+                      "flex": 1
+                    },
+                    {
+                      "type": "box",
+                      "layout": "baseline",
+                      "contents": [
+                        {
+                          "type": "filler"
+                        }
+                      ],
+                      "flex": 7
+                    }
+                  ],
+                  "flex": 1
+                }
+              ]
+            }
+          ],
+          "spacing": "lg",
+          "height": "19px"
+        }
+      );
+    }
+  }
+}
