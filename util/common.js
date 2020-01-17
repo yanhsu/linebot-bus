@@ -170,10 +170,28 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     "altText": "台中等公車",
     "contents": null
   }
-  for(let [i,stop] of stops.entries()) {
-    // if( i < 11) {
-      template.body.contents.push(
-        {
+  const carouselTemplate = {
+    "type": "carousel",
+    "contents": []
+  }
+  let page;
+  if(stops.length % 15 == 0) {
+    page = stops/15;
+  } else {
+    page = stops/15 + 1;
+  }
+  for(j = 0; j < page; j++) {
+
+    if(j = 0) {
+      carouselTemplate.contents.push(template);
+    } else {
+      let templateWithoutHeader = {...template};
+      delete templateWithoutHeader.header;
+      carouselTemplate.contents.push(templateWithoutHeader);
+    }
+    for(let [i,stop] of stops.entries()) {
+      if(i < (j + 1) * 15) {
+        carouselTemplate.contents[j].body.contents.push({
           "type": "box",
           "layout": "horizontal",
           "contents": [
@@ -220,90 +238,141 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
           ],
           "spacing": "md",
           "cornerRadius": "30px"
-        },
-      );
-      // if (i != stops.length - 1) {
-      //   template.body.contents.push(
-      //     {
-      //       "type": "box",
-      //       "layout": "horizontal",
-      //       "contents": [
-      //         {
-      //           "type": "box",
-      //           "layout": "vertical",
-      //           "contents": [
-      //             {
-      //               "type": "box",
-      //               "layout": "horizontal",
-      //               "contents": [
-      //                 {
-      //                   "type": "box",
-      //                   "layout": "baseline",
-      //                   "contents": [
-      //                     {
-      //                       "type": "filler"
-      //                     }
-      //                   ],
-      //                   "flex": 3
-      //                 },
-      //                 {
-      //                   "type": "box",
-      //                   "layout": "horizontal",
-      //                   "contents": [
-      //                     {
-      //                       "type": "box",
-      //                       "layout": "horizontal",
-      //                       "contents": [
-      //                         {
-      //                           "type": "filler",
-      //                           "flex": 8
-      //                         },
-      //                         {
-      //                           "type": "box",
-      //                           "layout": "baseline",
-      //                           "contents": [
-      //                             {
-      //                               "type": "text",
-      //                               "text": " "
-      //                             }
-      //                           ],
-      //                           "backgroundColor": "#000000",
-      //                           "flex": 1
-      //                         },
-      //                         {
-      //                           "type": "filler",
-      //                           "flex": 11
-      //                         }
-      //                       ]
-      //                     }
-      //                   ],
-      //                   "flex": 1
-      //                 },
-      //                 {
-      //                   "type": "box",
-      //                   "layout": "baseline",
-      //                   "contents": [
-      //                     {
-      //                       "type": "filler"
-      //                     }
-      //                   ],
-      //                   "flex": 7
-      //                 }
-      //               ],
-      //               "flex": 1
-      //             }
-      //           ]
-      //         }
-      //       ],
-      //       "spacing": "lg",
-      //       "height": "19px"
-      //     }
-      //   );
-      // }
-    // }
-
+        },);
+      }
+    }
   }
+  // for(let [i,stop] of stops.entries()) {
+  //     template.body.contents.push(
+  //       {
+  //         "type": "box",
+  //         "layout": "horizontal",
+  //         "contents": [
+  //           {
+  //             "type": "text",
+  //             "text": formatEstimatedTimeOfArrival(stop),
+  //             "size": "sm",
+  //             "flex": 3
+  //           },
+  //           {
+  //             "type": "box",
+  //             "layout": "vertical",
+  //             "contents": [
+  //               {
+  //                 "type": "filler"
+  //               },
+  //               {
+  //                 "type": "box",
+  //                 "layout": "vertical",
+  //                 "contents": [
+  //                   {
+  //                     "type": "filler"
+  //                   }
+  //                 ],
+  //                 "cornerRadius": "20px",
+  //                 "width": "13px",
+  //                 "height": "13px",
+  //                 "borderColor": "#FF2200",
+  //                 "borderWidth": "2px"
+  //               },
+  //               {
+  //                 "type": "filler"
+  //               }
+  //             ],
+  //             "flex": 1
+  //           },
+  //           {
+  //             "type": "text",
+  //             "text": stop.StopName.Zh_tw,
+  //             "gravity": "center",
+  //             "flex": 7,
+  //             "size": "sm"
+  //           }
+  //         ],
+  //         "spacing": "md",
+  //         "cornerRadius": "30px"
+  //       },
+  //     );
+  //     // if (i != stops.length - 1) {
+  //     //   template.body.contents.push(
+  //     //     {
+  //     //       "type": "box",
+  //     //       "layout": "horizontal",
+  //     //       "contents": [
+  //     //         {
+  //     //           "type": "box",
+  //     //           "layout": "vertical",
+  //     //           "contents": [
+  //     //             {
+  //     //               "type": "box",
+  //     //               "layout": "horizontal",
+  //     //               "contents": [
+  //     //                 {
+  //     //                   "type": "box",
+  //     //                   "layout": "baseline",
+  //     //                   "contents": [
+  //     //                     {
+  //     //                       "type": "filler"
+  //     //                     }
+  //     //                   ],
+  //     //                   "flex": 3
+  //     //                 },
+  //     //                 {
+  //     //                   "type": "box",
+  //     //                   "layout": "horizontal",
+  //     //                   "contents": [
+  //     //                     {
+  //     //                       "type": "box",
+  //     //                       "layout": "horizontal",
+  //     //                       "contents": [
+  //     //                         {
+  //     //                           "type": "filler",
+  //     //                           "flex": 8
+  //     //                         },
+  //     //                         {
+  //     //                           "type": "box",
+  //     //                           "layout": "baseline",
+  //     //                           "contents": [
+  //     //                             {
+  //     //                               "type": "text",
+  //     //                               "text": " "
+  //     //                             }
+  //     //                           ],
+  //     //                           "backgroundColor": "#000000",
+  //     //                           "flex": 1
+  //     //                         },
+  //     //                         {
+  //     //                           "type": "filler",
+  //     //                           "flex": 11
+  //     //                         }
+  //     //                       ]
+  //     //                     }
+  //     //                   ],
+  //     //                   "flex": 1
+  //     //                 },
+  //     //                 {
+  //     //                   "type": "box",
+  //     //                   "layout": "baseline",
+  //     //                   "contents": [
+  //     //                     {
+  //     //                       "type": "filler"
+  //     //                     }
+  //     //                   ],
+  //     //                   "flex": 7
+  //     //                 }
+  //     //               ],
+  //     //               "flex": 1
+  //     //             }
+  //     //           ]
+  //     //         }
+  //     //       ],
+  //     //       "spacing": "lg",
+  //     //       "height": "19px"
+  //     //     }
+  //     //   );
+  //     // }
+  // }
 
-  flexTemplate.contents = template;
+  flexTemplate.contents = carouselTemplate;
   return flexTemplate;
 }
