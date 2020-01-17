@@ -177,7 +177,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     ]
   }
   let page;
-  let perpageLimit = 20;
+  let perpageLimit = 25;
   if(stops.length % perpageLimit == 0) {
     page = parseInt(stops.length/perpageLimit);
   } else {
@@ -245,8 +245,11 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
         },);
       }
     }
-    console.log(carouselTemplate.contents[j].body.contents.length);
   }
+  for(j = 0; j < page; j++) {
+    console.log(carouselTemplate.contents[j].body.contents);
+  }
+
   // for(let [i,stop] of stops.entries()) {
   //     template.body.contents.push(
   //       {
