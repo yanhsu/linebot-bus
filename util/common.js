@@ -199,7 +199,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
         "contents": [
           {
             "type": "text",
-            "text": formatEstimatedTimeOfArrival(stop),
+            "text": formatEstimatedTimeOfArrival(stops[i]),
             "size": "sm",
             "flex": 3
           },
