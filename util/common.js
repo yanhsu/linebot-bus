@@ -187,8 +187,8 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     if(j = 0) {
       carouselTemplate.contents.push(template);
     } else {
-      // let templateWithoutHeader = {...template};
-      // delete templateWithoutHeader.header;
+      let templateWithoutHeader = {...template};
+      delete templateWithoutHeader.header;
       carouselTemplate.contents.push(template);
     }
     for(let [i,stop] of stops.entries()) {
