@@ -72,7 +72,7 @@ bot.on('message', async function(event) {
   });
 
   bot.on('postback', async function (event) {
-    console.log(event);
+    // console.log(event);
     const senderID = event.source.userId;
     let msg = event.postback.data;
     try {
