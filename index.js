@@ -92,7 +92,9 @@ bot.on('message', async function(event) {
         try {
           await new Promise(function (resolve, reject) {
             try {
-              event.reply(formatBusFlexMessage(searchRoute[senderID],res.data));
+              let replymsg = formatBusFlexMessage(searchRoute[senderID],res.data);
+              console.log(JSON.stringify(replymsg));
+              event.reply(replymsg);
               resolve();
               // step[senderID] = 3;
             } catch (err) {
