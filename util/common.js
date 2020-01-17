@@ -180,8 +180,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   } else {
     page = stops/15 + 1;
   }
-  for(j = 0; j < page; j++) {
 
+  console.log("page => %s", page);
+  for(j = 0; j < page; j++) {
     if(j = 0) {
       carouselTemplate.contents.push(template);
     } else {
@@ -372,7 +373,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   //     //   );
   //     // }
   // }
-
+  console.log("carouselTemplate => %O", carouselTemplate);
   flexTemplate.contents = carouselTemplate;
   return flexTemplate;
 }
