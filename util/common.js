@@ -191,7 +191,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       delete templateWithoutHeader.header;
       carouselTemplate.contents.push(template);
     }
-    for(let [i,stop] of stops.entries()) {
+  }
+  for(let [i,stop] of stops.entries()) {
+    for(j = 0; j< page; j++) {
       if(i >= j* 20 && i < (j + 1) * 20) {
         carouselTemplate.contents[j].body.contents.push({
           "type": "box",

@@ -171,7 +171,6 @@ bot.on('message', async function(event) {
  }
 
  async function settingRoute(msg, senderID, event) {
-   console.log(event);
    let user = await userService.findByLineId(senderID);
    if(!user) {
      user = await userService.create({ lineId: senderID });
