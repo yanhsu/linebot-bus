@@ -192,7 +192,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       delete templateWithoutHeader.header;
       carouselTemplate.contents.push({...templateWithoutHeader});
     }
-
+    console.log(carouselTemplate.contents[j].body.contents.length);
     for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
       if(i < stops.length) {
         carouselTemplate.contents[j].body.contents.push({
@@ -245,10 +245,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
         },);
       }
     }
+
   }
-  for(j = 0; j < page; j++) {
-    console.log(carouselTemplate.contents[j].body.contents);
-  }
+
 
   // for(let [i,stop] of stops.entries()) {
   //     template.body.contents.push(
