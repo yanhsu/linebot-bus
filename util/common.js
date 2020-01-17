@@ -187,9 +187,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     if(j = 0) {
       carouselTemplate.contents.push(template);
     } else {
-      let templateWithoutHeader = {...template};
-      delete templateWithoutHeader.header;
-      carouselTemplate.contents.push(templateWithoutHeader);
+      // let templateWithoutHeader = {...template};
+      // delete templateWithoutHeader.header;
+      carouselTemplate.contents.push(template);
     }
     for(let [i,stop] of stops.entries()) {
       if(i < (j + 1) * 15) {
@@ -374,7 +374,6 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   //     //   );
   //     // }
   // }
-  console.log("carouselTemplate => %O", carouselTemplate);
   flexTemplate.contents = carouselTemplate;
   return flexTemplate;
 }
