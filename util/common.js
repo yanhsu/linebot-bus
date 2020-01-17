@@ -176,9 +176,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
   let page;
   if(stops.length % 15 == 0) {
-    page = stops/15;
+    page = stops.length/15;
   } else {
-    page = stops/15 + 1;
+    page = stops.length/15 + 1;
   }
 
   console.log("page => %s", page);
