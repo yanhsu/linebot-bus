@@ -141,12 +141,23 @@ bot.on('message', async function(event) {
       }
       if (step[senderID] == 3) {
         try {
-          console.log("step3 = %o", event);
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
-          await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
-          step[senderID] = 0;
-          start[senderID] = 0;
+          const { StopName, StopID } = res.data[0];
+          console.log(res.data[0]);
+
+          favoriteId[senderID] = await favoriteService.create({
+            routeId: searchRoute[senderID],
+            direction: searchDirection[senderID],
+            stopId: StopID,
+            stopName: StopName.Zh_tw,
+            UserId: user.id
+          });
+          await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+          // step[senderID] = 0;
+          // start[senderID] = 0;
+          step[senderID] = 4;
         } catch (error) {
+          console.log(error);
           await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
         }
       }
@@ -228,7 +239,8 @@ bot.on('message', async function(event) {
       console.log(error);
       await event.reply("您所輸入的路線不存在，請重新輸入");
     }
-  } else if (step[senderID] == 3) {
+  }
+    else if (step[senderID] == 3) {
     try {
       let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
       const { StopName, StopID } = res.data[0];
