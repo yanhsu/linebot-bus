@@ -176,9 +176,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
   let page;
   if(stops.length % 15 == 0) {
-    page = parseInt(stops.length/15);
+    page = parseInt(stops.length/22);
   } else {
-    page = parseInt(stops.length/15) + 1;
+    page = parseInt(stops.length/22) + 1;
   }
 
 
@@ -192,7 +192,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       carouselTemplate.contents.push(template);
     }
     for(let [i,stop] of stops.entries()) {
-      if(i < (j + 1) * 15) {
+      if(i < (j + 1) * 22) {
         carouselTemplate.contents[j].body.contents.push({
           "type": "box",
           "layout": "horizontal",
