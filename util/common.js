@@ -176,7 +176,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     ]
   }
   let page;
-  let perpageLimit = 5;
+  let perpageLimit = 20;
   if(stops.length % perpageLimit == 0) {
     page = parseInt(stops.length/perpageLimit);
   } else {
@@ -184,7 +184,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
 
   for(j = 0; j < page; j++) {
-    if(j = 0) {
+    if(j == 0) {
       carouselTemplate.contents.push(template);
     } else {
       let templateWithoutHeader = {...template};
