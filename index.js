@@ -9,7 +9,7 @@ const cron = require('node-cron');
 const moment = require('moment-timezone');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
-const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage } = require('./util/common');
+const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
 
 setInterval(function() {
   https.get("https://taichungbus.herokuapp.com/");
@@ -109,17 +109,47 @@ bot.on('message', async function(event) {
         }
 
       }
-      // if (step[senderID] == 3) {
-      //   try {
-      //     console.log("step3 = %o", event);
-      //     let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
-      //     await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
-      //     step[senderID] = 0;
-      //     start[senderID] = 0;
-      //   } catch (error) {
-      //     await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
-      //   }
-      // }
+      if(step[senderID] == 2.1) {
+          let direction = 0;
+          if(msg.indexOf("回程") >= 0) {
+            direction = 1;
+          }
+          if(msg.indexOf("取消") >= 0) {
+            start[senderID] = 0, step[senderID] = 0;
+            await event.reply("已取消，若要重新查詢請點選選單");
+          }
+          searchDirection[senderID] = direction;
+          console.log("direction = %s", direction);
+          // let res = await bus.getStop(searchRoute[senderID], direction);
+          let res = await  bus.getStop(searchRoute[senderID], direction);
+          try {
+            await new Promise(function (resolve, reject) {
+              try {
+                let replymsg = formatFlexMessage(searchRoute[senderID],res.data[0].Stops);
+                // console.log(JSON.stringify(replymsg));
+                event.reply(replymsg);
+                resolve();
+              } catch (err) {
+                reject(err)
+              }
+            });
+            step[senderID] = 3;
+          } catch(err) {
+            console.log("err => %s", err);
+            await event.reply("發生錯誤，請與偷懶的開發人員連繫");
+          }
+      }
+      if (step[senderID] == 3) {
+        try {
+          console.log("step3 = %o", event);
+          let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
+          await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
+          step[senderID] = 0;
+          start[senderID] = 0;
+        } catch (error) {
+          await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
+        }
+      }
       if(step[senderID] == 4) {
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
@@ -193,7 +223,7 @@ bot.on('message', async function(event) {
       let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
       await event.reply(formatQuickReply("請選擇去程回程",[go,back], 'postback','buttons'));
       searchRoute[senderID] = msg;
-      step[senderID] = 2;
+      step[senderID] = 2.1;
     } catch (error) {
       console.log(error);
       await event.reply("您所輸入的路線不存在，請重新輸入");
