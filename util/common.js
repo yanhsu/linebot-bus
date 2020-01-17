@@ -192,7 +192,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       carouselTemplate.contents.push(template);
     }
     for(let [i,stop] of stops.entries()) {
-      if(i < (j + 1) * 22) {
+      if(i >= j* 22 && i < (j + 1) * 22) {
         carouselTemplate.contents[j].body.contents.push({
           "type": "box",
           "layout": "horizontal",
