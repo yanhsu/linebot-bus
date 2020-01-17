@@ -198,8 +198,9 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       delete templateWithoutHeader.header;
       carouselTemplate.contents.push(template);
     }
-    console.log("j => %s",j);
+
     for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
+      console.log("stops[i] => %O",stops[i]);
       carouselTemplate.contents[j].body.contents.push({
         "type": "box",
         "layout": "horizontal",
