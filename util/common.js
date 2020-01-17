@@ -199,56 +199,57 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
       carouselTemplate.contents.push(templateWithoutHeader);
     }
 
-    for(i = j * perpageLimit; i< (j+1) * perpageLimit && i < stops.length; i++){
-
-      carouselTemplate.contents[j].body.contents.push({
-        "type": "box",
-        "layout": "horizontal",
-        "contents": [
-          {
-            "type": "text",
-            "text": formatEstimatedTimeOfArrival(stops[i]),
-            "size": "sm",
-            "flex": 3
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "filler"
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "filler"
-                  }
-                ],
-                "cornerRadius": "20px",
-                "width": "13px",
-                "height": "13px",
-                "borderColor": "#FF2200",
-                "borderWidth": "2px"
-              },
-              {
-                "type": "filler"
-              }
-            ],
-            "flex": 1
-          },
-          {
-            "type": "text",
-            "text": stops[i].StopName.Zh_tw,
-            "gravity": "center",
-            "flex": 7,
-            "size": "sm"
-          }
-        ],
-        "spacing": "md",
-        "cornerRadius": "30px"
-      },);
+    for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
+      if(i < stops.length) {
+        carouselTemplate.contents[j].body.contents.push({
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "text",
+              "text": formatEstimatedTimeOfArrival(stops[i]),
+              "size": "sm",
+              "flex": 3
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "filler"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "filler"
+                    }
+                  ],
+                  "cornerRadius": "20px",
+                  "width": "13px",
+                  "height": "13px",
+                  "borderColor": "#FF2200",
+                  "borderWidth": "2px"
+                },
+                {
+                  "type": "filler"
+                }
+              ],
+              "flex": 1
+            },
+            {
+              "type": "text",
+              "text": stops[i].StopName.Zh_tw,
+              "gravity": "center",
+              "flex": 7,
+              "size": "sm"
+            }
+          ],
+          "spacing": "md",
+          "cornerRadius": "30px"
+        },);
+      }
     }
   }
   // for(let [i,stop] of stops.entries()) {
