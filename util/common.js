@@ -1,6 +1,7 @@
 const jsSHA = require('jssha');
 const moment = require('moment-timezone');
 const config = require('config');
+const _ = require('lodash');
 
 module.exports.getAuthorizationHeader = () => {
 	var AppID = process.env.AppID || config.AppID;
@@ -185,12 +186,12 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
 
   for(j = 0; j < page; j++) {
-    let templateWithoutHeader = Object.assign({}, template);
+    let templateWithoutHeader = _.cloneDeep(template);
     delete templateWithoutHeader.header;
     if(j == 0) {
-      carouselTemplate.contents.push(Object.assign({}, template));
+      carouselTemplate.contents.push(_.cloneDeep(template));
     } else {
-      carouselTemplate.contents.push(Object.assign({}, templateWithoutHeader));
+      carouselTemplate.contents.push(_.cloneDeep(templateWithoutHeader));
     }
     console.log(carouselTemplate.contents[j].body.contents.length);
     for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
