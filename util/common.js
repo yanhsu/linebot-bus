@@ -185,12 +185,12 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
 
   for(j = 0; j < page; j++) {
+    let templateWithoutHeader = Object.assign({}, template);
+    delete templateWithoutHeader.header;
     if(j == 0) {
-      carouselTemplate.contents.push({...template});
+      carouselTemplate.contents.push(Object.assign({}, template));
     } else {
-      let templateWithoutHeader = {...template};
-      delete templateWithoutHeader.header;
-      carouselTemplate.contents.push({...templateWithoutHeader});
+      carouselTemplate.contents.push(Object.assign({}, templateWithoutHeader));
     }
     console.log(carouselTemplate.contents[j].body.contents.length);
     for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
