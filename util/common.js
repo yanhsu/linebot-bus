@@ -104,12 +104,19 @@ module.exports.formatFlexMessage = (title, stops) => {
 
 module.exports.formatBusFlexMessage = (routeName, stops) => {
   formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
+    class stop {
+      PlateNumb;
+      EstimateTime;
+      StopStatus;
+      NextBusTime;
+    }
+    const obj = new stop(estimatedTimeOfArrival);
     const {
       PlateNumb,
       EstimateTime,
       StopStatus,
       NextBusTime
-    } = estimatedTimeOfArrival;
+    } = obj;
     let min;
     if (EstimateTime > 0) {
       min = EstimateTime / 60;
