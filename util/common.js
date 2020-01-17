@@ -176,10 +176,11 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
   let page;
   if(stops.length % 15 == 0) {
-    page = parseInt(stops.length)/15;
+    page = parseInt(stops.length/15);
   } else {
-    page = parseInt(stops.length)/15 + 1;
+    page = parseInt(stops.length/15) + 1;
   }
+
 
   console.log("page => %s", page);
   for(j = 0; j < page; j++) {
