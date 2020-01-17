@@ -104,19 +104,13 @@ module.exports.formatFlexMessage = (title, stops) => {
 
 module.exports.formatBusFlexMessage = (routeName, stops) => {
   formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
-    class stop {
-      PlateNumb;
-      EstimateTime;
-      StopStatus;
-      NextBusTime;
-    }
-    const obj = new stop(estimatedTimeOfArrival);
+
     const {
       PlateNumb,
       EstimateTime,
       StopStatus,
       NextBusTime
-    } = obj;
+    } = estimatedTimeOfArrival;
     let min;
     if (EstimateTime > 0) {
       min = EstimateTime / 60;
@@ -200,6 +194,8 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
     }
 
     for(i = j * perpageLimit; i< (j+1) * perpageLimit; i++){
+      console.log(i);
+      console.log((j+1) * perpageLimit);
       if(i < stops.length) {
         carouselTemplate.contents[j].body.contents.push({
           "type": "box",
