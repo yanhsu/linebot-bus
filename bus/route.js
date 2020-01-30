@@ -57,6 +57,17 @@ class Route {
 			throw error;
 		}
 	}
+	async getAllRoute() {
+		try {
+			return await axios({
+				url: `https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/Taichung?$format=JSON`,
+				method: 'get',
+				headers: getAuthorizationHeader(),
+			});
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 function createRoute() {
 	return new Route();

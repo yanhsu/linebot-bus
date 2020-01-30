@@ -224,7 +224,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
                   "cornerRadius": "20px",
                   "width": "13px",
                   "height": "13px",
-                  "borderColor": stops[i] && stops[i].EstimateTime && stops[i].EstimateTime/60 < 5?"#00FF00": "#FF2200",
+                  "borderColor": stops[i] && stops[i].EstimateTime && stops[i].EstimateTime/60 < 6?"#00FF00": "#FF2200",
                   "borderWidth": "2px"
                 },
                 {

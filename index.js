@@ -388,18 +388,32 @@ bot.on('message', async function(event) {
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
   
-  var server = app.listen(process.env.PORT || 9006, function() {
-    var port = server.address().port;
+  let server = app.listen(process.env.PORT || 9006, async function() {
+    let port = server.address().port;
     console.log("App now running on port", port);
+    const routes = bus.getAllRoute().data;
+    for(let route of routes) {
+      let value = {
+        routeUID: route.RouteUID,
+        routeName: route.RouteName.Zh_tw,
+        departureStopName: route.DepartureStopNameZh,
+        destinationStopName: route.DestinationStopNameZh
+      }
+      const condition = {
+        routeUID: route.RouteUID
+      }
+      await routeService.updateOrInsert(value, condition);
+    }
   });
 
   models.sequelize.sync().then(function() {
     /**
      * Listen on provided port, on all network interfaces.
      */
+
     // server.listen(port, function() {
-    //   // debug('Express server listening on port ' + server.address().port);
+    //   debug('Express server listening on port ' + server.address().port);
     // });
-    // server.on('error', onError);
-    // server.on('listening', onListening);
+    server.on('error', onError);
+    server.on('listening', onListening);
   });
