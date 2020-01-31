@@ -144,7 +144,7 @@ bot.on('message', async function(event) {
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
           const { StopName, StopID } = res.data[0];
           console.log(res.data[0]);
-
+          let user = await userService.findByLineId(senderID);
           favoriteId[senderID] = await favoriteService.create({
             routeId: searchRoute[senderID],
             direction: searchDirection[senderID],
