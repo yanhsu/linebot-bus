@@ -391,7 +391,7 @@ bot.on('message', async function(event) {
   let server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
-    const routes = await bus.getAllRoute().data;
+    const routes = await bus.getAllRoute();
     console.log("routes => %o", routes);
     for(let route of routes) {
       let value = {
@@ -415,6 +415,6 @@ bot.on('message', async function(event) {
     // server.listen(port, function() {
     //   debug('Express server listening on port ' + server.address().port);
     // });
-    server.on('error', onError);
-    server.on('listening', onListening);
+    // server.on('error', onError);
+    // server.on('listening', onListening);
   });
