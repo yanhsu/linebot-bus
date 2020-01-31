@@ -133,13 +133,13 @@ bot.on('message', async function(event) {
                 reject(err)
               }
             });
-            step[senderID] = 3;
+            step[senderID] = 2.3;
           } catch(err) {
             console.log("err => %s", err);
             await event.reply("發生錯誤，請與偷懶的開發人員連繫");
           }
       }
-      if (step[senderID] == 3) {
+      if (step[senderID] == 2.3) {
         try {
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
           const { StopName, StopID } = res.data[0];
@@ -155,24 +155,24 @@ bot.on('message', async function(event) {
           await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
           // step[senderID] = 0;
           // start[senderID] = 0;
-          step[senderID] = 4;
+          step[senderID] = 2.4;
         } catch (error) {
           console.log(error);
           await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
         }
       }
-      if(step[senderID] == 4) {
+      if(step[senderID] == 2.4) {
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
           await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','buttons'));
-          step[senderID] = 5;
+          step[senderID] = 2.5;
         } else {
           await event.reply(`感謝您的使用\n 若要重新查詢請按下方選單`);
           start[senderID] = 0;
           step[senderID] = 0;
         }
       }
-      if(step[senderID] == 5) {
+      if(step[senderID] == 2.5) {
         let time = event.postback.params.time;
         try {
           if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(time)) {
