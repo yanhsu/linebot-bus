@@ -152,7 +152,14 @@ bot.on('message', async function(event) {
             stopName: StopName.Zh_tw,
             UserId: user.id
           });
-          await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+          await new Promise(function (resolve, reject) {
+            try{
+              event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+              resolve();
+            } catch(err) {
+              resolve(err);
+            }
+          });
           // step[senderID] = 0;
           // start[senderID] = 0;
           step[senderID] = 2.4;
