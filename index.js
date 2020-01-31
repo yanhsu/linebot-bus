@@ -157,7 +157,7 @@ bot.on('message', async function(event) {
               event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
               resolve();
             } catch(err) {
-              resolve(err);
+              reject(err);
             }
           });
           // step[senderID] = 0;
