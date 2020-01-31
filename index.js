@@ -162,6 +162,7 @@ bot.on('message', async function(event) {
         }
       }
       if(step[senderID] == 2.4) {
+        console.log(msg);
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
           await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','buttons'));
