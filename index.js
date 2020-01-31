@@ -391,7 +391,8 @@ bot.on('message', async function(event) {
   let server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
-    const routes = bus.getAllRoute().data;
+    const routes = await bus.getAllRoute().data;
+    console.log("routes => %o", routes);
     for(let route of routes) {
       let value = {
         routeUID: route.RouteUID,
