@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     departureStopName: {// 起點站名
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     destinationStopName: { // 終點站名
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     }
   });
   return Route;

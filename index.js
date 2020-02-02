@@ -123,27 +123,30 @@ bot.on('message', async function(event) {
           // let res = await bus.getStop(searchRoute[senderID], direction);
           let res = await  bus.getStop(searchRoute[senderID], direction);
           try {
-            await new Promise(function (resolve, reject) {
+            let isResolve = await new Promise(async function (resolve, reject) {
               try {
                 let replymsg = formatFlexMessage(searchRoute[senderID],res.data[0].Stops);
                 // console.log(JSON.stringify(replymsg));
-                event.reply(replymsg);
-                resolve();
+                await event.reply(replymsg);
+                resolve(true);
               } catch (err) {
-                reject(err)
+                console.log(err);
+                reject(false);
               }
             });
-            step[senderID] = 2.3;
+            if(isResolve) {
+              step[senderID] = 2.3;
+            }
           } catch(err) {
             console.log("err => %s", err);
             await event.reply("發生錯誤，請與偷懶的開發人員連繫");
           }
       }
-      if (step[senderID] == 2.3) {
+      else if (step[senderID] == 2.3) {
         try {
+          console.log("2.3 =>" + msg);
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
           const { StopName, StopID } = res.data[0];
-          console.log(res.data[0]);
           let user = await userService.findByLineId(senderID);
           favoriteId[senderID] = await favoriteService.create({
             routeId: searchRoute[senderID],
@@ -152,24 +155,28 @@ bot.on('message', async function(event) {
             stopName: StopName.Zh_tw,
             UserId: user.id
           });
-          await new Promise(function (resolve, reject) {
+          let isResolve = await new Promise(async function (resolve, reject) {
             try{
-              event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
-              resolve();
+              await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+              resolve(true);
             } catch(err) {
-              reject(err);
+              console.log(err);
+              reject(false);
             }
           });
+          console.log(event);
+          if(isResolve) {
+            step[senderID] = 2.4;
+          }
           // step[senderID] = 0;
           // start[senderID] = 0;
-          step[senderID] = 2.4;
         } catch (error) {
           console.log(error);
           await event.reply("您所輸入的站牌號碼不存在，請重新輸入");
         }
       }
-      if(step[senderID] == 2.4) {
-        console.log(msg);
+      else if(step[senderID] == 2.4) {
+        console.log("2.4 => %O",event);
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
           await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','buttons'));
