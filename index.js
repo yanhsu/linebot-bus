@@ -7,6 +7,7 @@ const Service = require('./services');
 const https = require("https");
 const cron = require('node-cron');
 const moment = require('moment-timezone');
+const cache = require('node-cache');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
@@ -215,9 +216,10 @@ bot.on('message', async function(event) {
     await event.reply('歡迎使用台中公車查詢系統\n請輸入要查詢的路線號碼');
   } else if (step[senderID] == 1) {
     try {
-      let route = await bus.getRoute(msg.trim());
-      let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
-      let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
+      // let route = await bus.getRoute(msg.trim());
+      let route = cache.get(msg.trim());
+      let go = `去程往 ${route.destinationStopName} 方向`;
+      let back = `回程往 ${route.departureStopName} 方向`;
       await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], 'postback', 'buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
@@ -389,16 +391,13 @@ bot.on('message', async function(event) {
   }
  }
  cron.schedule('*/1 * * * *', async () => {
-  const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
-  const favorites = await favoriteService.findByTriggerTime(timeNow);
-  for(let favorite of favorites) {
-    let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
-    const msg = formatEstimatedTimeOfArrival(res.data[0]);
-    bot.push(favorite.User.lineId, `${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
-  }
-
-  console.log('running on every minute');
+  await cronService.pushFavoriteStop(bot);
+  // console.log('running on every minute');
 });
+ cron.schedule('0 5 * * *',async () => {
+  await cronService.updateRouteInfo();
+  await cronService.setCache(cache);
+ })
   const app = express();
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
@@ -406,19 +405,7 @@ bot.on('message', async function(event) {
   let server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
-    const res= await bus.getAllRoute();
-    for(let route of res.data) {
-      let value = {
-        routeUID: route.RouteUID,
-        routeName: route.RouteName.Zh_tw,
-        departureStopName: route.DepartureStopNameZh,
-        destinationStopName: route.DestinationStopNameZh
-      }
-      const condition = {
-        routeUID: route.RouteUID
-      }
-      await routeService.updateOrInsert(value, condition);
-    }
+    await cronService.setCache(cache);
   });
 
   models.sequelize.sync().then(function() {

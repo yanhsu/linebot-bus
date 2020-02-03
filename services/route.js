@@ -11,6 +11,10 @@ class Route {
       return await models.Route.create(values);
     }
   }
+
+  async findAll() {
+    return  await  models.Route.findAll();
+  }
 }
 
 module.exports = Route;
