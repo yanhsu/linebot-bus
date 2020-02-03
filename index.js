@@ -406,13 +406,13 @@ bot.on('message', async function(event) {
   global.server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
+    await cronService.setCache(cache);
   });
 
   models.sequelize.sync().then(async function() {
     /**
      * Listen on provided port, on all network interfaces.
      */
-    await cronService.setCache(cache);
     // server.listen(port, function() {
     //   debug('Express server listening on port ' + server.address().port);
     // });
