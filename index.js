@@ -394,8 +394,9 @@ bot.on('message', async function(event) {
   // console.log('running on every minute');
 });
  cron.schedule('0 5 * * *',async () => {
-  await cronService.updateRouteInfo();
-  await cronService.setCache(cache);
+   cache.flushAll();
+   await cronService.updateRouteInfo();
+   await cronService.setCache(cache);
  })
   const app = express();
   const linebotParser = bot.parser();

@@ -29,7 +29,6 @@ class Cron {
   }
 
   async setCache(cache) {
-    cache.flushAll();
     const allRoute = await routeService.getAllRoute();
     for(let route of allRoute) {
       cache.set(route.routeName, route, 86400);
