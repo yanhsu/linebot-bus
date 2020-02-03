@@ -145,7 +145,7 @@ bot.on('message', async function(event) {
       }
       else if (step[senderID] == 2.3) {
         try {
-          console.log("2.3 =>" + msg);
+          // console.log("2.3 =>" + msg);
           let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
           const { StopName, StopID } = res.data[0];
           let user = await userService.findByLineId(senderID);
@@ -177,7 +177,7 @@ bot.on('message', async function(event) {
         }
       }
       else if(step[senderID] == 2.4) {
-        console.log("2.4 => %O",event);
+        // console.log("2.4 => %O",event);
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
           await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','buttons'));
@@ -246,10 +246,11 @@ bot.on('message', async function(event) {
     }
   } else if (step[senderID] == 1) {
     try {
-      let route = await bus.getRoute(msg);
-      let go = `去程往 ${route.data[0].DestinationStopNameZh} 方向`;
-      let back = `回程往 ${route.data[0].DepartureStopNameZh} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back], 'postback','buttons'));
+      let route = myCache.get(msg.trim());
+      let go = `去程往 ${route.destinationStopName} 方向`;
+      let back = `回程往 ${route.departureStopName} 方向`;
+      let cancel = `取消查詢`;
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,cancel], 'postback','buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2.1;
     } catch (error) {
@@ -301,8 +302,8 @@ bot.on('message', async function(event) {
     await event.reply('您可以新增、編輯或刪除常用站牌。請根據您要進行的設定，輸入對應的號碼。\n\n' +
     '1.新增： 設定新的常用站牌\n2.刪除：移除先前設定的常用站牌\n\n 0.取消');
     start[senderID] = 3;
-    step[senderID] = 2;
-  } else if (step[senderID] == 2) {
+    step[senderID] = 3.2;
+  } else if (step[senderID] == 3.2) {
     let deleteMsg = "請選擇您想要刪除的常用站牌。\n\n";
     for(let i = 1; i <= favorites.length; i++) {
       const favorite = favorites[i-1];
@@ -397,7 +398,7 @@ bot.on('message', async function(event) {
  cron.schedule('0 5 * * *',async () => {
    cache.flushAll();
    await cronService.updateRouteInfo();
-   await cronService.setCache(cache);
+   await cronService.setCache(myCache);
  })
   const app = express();
   const linebotParser = bot.parser();
