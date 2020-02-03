@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const bus = require('../bus/route');
+const moment = require('moment-timezone');
 class Cron {
   async pushFavoriteStop(bot) {
     const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
@@ -28,7 +29,7 @@ class Cron {
   }
 
   async setCache(cache) {
-    cache.flush();
+    cache.flushAll();
     const allRoute = await routeService.getAllRoute();
     for(let route of allRoute) {
       cache.set(route.routeName, route, 86400);

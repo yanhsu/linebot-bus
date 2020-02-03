@@ -6,7 +6,6 @@ const config = require('config');
 const Service = require('./services');
 const https = require("https");
 const cron = require('node-cron');
-const moment = require('moment-timezone');
 const cache = require('node-cache');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
