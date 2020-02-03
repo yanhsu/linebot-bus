@@ -6,7 +6,7 @@ const config = require('config');
 const Service = require('./services');
 const https = require("https");
 const cron = require('node-cron');
-const cache = require('node-cache');
+const myCache = require('node-cache');
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
@@ -406,7 +406,7 @@ bot.on('message', async function(event) {
   global.server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
-    await cronService.setCache(cache);
+    await cronService.setCache(myCache);
   });
 
   models.sequelize.sync().then(async function() {
