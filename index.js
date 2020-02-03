@@ -399,10 +399,11 @@ bot.on('message', async function(event) {
    await cronService.setCache(cache);
  })
   const app = express();
+ global.app = app;
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
   
-  let server = app.listen(process.env.PORT || 9006, async function() {
+  global.server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
   });

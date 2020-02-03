@@ -2,6 +2,9 @@ const cron = require('node-cron');
 const bus = require('../bus/route');
 const moment = require('moment-timezone');
 class Cron {
+  Cron() {
+
+  }
   async pushFavoriteStop(bot) {
     const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
     const favorites = await favoriteService.findByTriggerTime(timeNow);
