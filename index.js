@@ -400,7 +400,6 @@ bot.on('message', async function(event) {
    await cronService.setCache(cache);
  })
   const app = express();
- global.app = app;
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
   
