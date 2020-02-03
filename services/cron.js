@@ -34,8 +34,8 @@ class Cron {
   async setCache(myCache) {
     const allRoute = await routeService.findAll();
     for(let route of allRoute) {
-      console.log(route);
-      myCache.set(route.routeName, route, 86400);
+      console.log(route.routeName);
+      myCache.set(route.routeName, route.dataValues, 86400);
     }
   }
 
