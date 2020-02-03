@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const bus = require('./bus/route');
+const bus = require('../bus/route');
 class Cron {
   async pushFavoriteStop(bot) {
     const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
