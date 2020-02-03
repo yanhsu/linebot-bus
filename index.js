@@ -217,7 +217,7 @@ bot.on('message', async function(event) {
   } else if (step[senderID] == 1) {
     try {
       // let route = await bus.getRoute(msg.trim());
-      let route = cache.get(msg.trim());
+      let route = myCache.get(msg.trim());
       let go = `去程往 ${route.destinationStopName} 方向`;
       let back = `回程往 ${route.departureStopName} 方向`;
       await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], 'postback', 'buttons'));
