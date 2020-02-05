@@ -17,13 +17,13 @@ module.exports.getAuthorizationHeader = () => {
 	return { 'Authorization': Authorization, 'X-Date': GMTString};
 };
 
-module.exports.formatQuickReply = (title, replies, actionType, templateType) => {
+module.exports.formatQuickReply = (title, replies,data, actionType, templateType) => {
   let actions = [];
-  for(let reply of replies) {
+  for(let [i,reply] of replies.entries()) {
     actions.push({
       type: actionType,
       label: reply,
-      data: reply,
+      data: data[i],
       mode: 'time'
     })
   }
@@ -65,7 +65,7 @@ module.exports.formatEstimatedTimeOfArrival = (estimatedTimeOfArrival) => {
   }
 }
 
-module.exports.formatFlexMessage = (title, stops) => {
+module.exports.formatFlexMessage = (title, contents, labelName, dataName) => {
   const flexTemplate = {
     "type": "flex",
     "altText": "台中等公車",
@@ -88,14 +88,14 @@ module.exports.formatFlexMessage = (title, stops) => {
       ]
     }
   }
-  for(let [i,stop] of stops.entries()) {
+  for(let [i,content] of contents.entries()) {
     template.body.contents.push({
       "type": "button",
       "style": i%2 ?"primary": "secondary",
       "action": {
         "type": "postback",
-        "label": stop.StopName.Zh_tw,
-        "data": stop.StopSequence
+        "label": content[labelName],//StopName.Zh_tw
+        "data": content[dataName] //StopSequence
       }
     });
   }

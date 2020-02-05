@@ -37,7 +37,7 @@ var branch = {
 };
 bot.on('message', async function(event) {
     const senderID = event.source.userId;
-    console.log(start[senderID]);
+    // console.log(start[senderID]);
     if (event.message.type = 'text') {
       let msg = event.message.text.trim();
       if(start[senderID]!=0 && start[senderID]!= undefined) {
@@ -126,7 +126,7 @@ bot.on('message', async function(event) {
           try {
             let isResolve = await new Promise(async function (resolve, reject) {
               try {
-                let replymsg = formatFlexMessage(searchRoute[senderID],res.data[0].Stops);
+                let replymsg = formatFlexMessage(searchRoute[senderID],res.data[0].Stops,"StopName.Zh_tw","StopSequence");
                 // console.log(JSON.stringify(replymsg));
                 await event.reply(replymsg);
                 resolve(true);
@@ -158,7 +158,7 @@ bot.on('message', async function(event) {
           });
           let isResolve = await new Promise(async function (resolve, reject) {
             try{
-              await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+              await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],["是","否"],'postback','buttons'));
               resolve(true);
             } catch(err) {
               console.log(err);
@@ -180,7 +180,7 @@ bot.on('message', async function(event) {
         // console.log("2.4 => %O",event);
         if(msg.indexOf("是") >= 0) {
           let replyButton = "點擊選取時間";
-          await event.reply(formatQuickReply("請選擇時間",[replyButton], 'datetimepicker','buttons'));
+          await event.reply(formatQuickReply("請選擇時間",[replyButton],[replyButton], 'datetimepicker','buttons'));
           step[senderID] = 2.5;
         } else {
           await event.reply(`感謝您的使用\n 若要重新查詢請按下方選單`);
@@ -188,7 +188,7 @@ bot.on('message', async function(event) {
           step[senderID] = 0;
         }
       }
-      if(step[senderID] == 2.5) {
+      else if(step[senderID] == 2.5) {
         let time = event.postback.params.time;
         try {
           if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(time)) {
@@ -203,6 +203,30 @@ bot.on('message', async function(event) {
           console.log(err);
           await event.reply("發生非預期錯誤，請洽開發人員!!");
         }
+      }
+      else if (step[senderID] == 3.2) {
+        let deleteMsg = "請選擇您想要刪除的常用站牌。\n\n";
+        let deleteFavorites = [];
+        for(let i = 1; i <= favorites.length; i++) {
+          const favorite = favorites[i-1];
+          let routeInfo = myCache.get(favorite.routeId);
+          deleteFavorites.push({ index: i, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
+          deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}\n`;
+        }
+        deleteMsg += '\n0.取消';
+        deleteFavorites.push({index: 0, content: `取消刪除`});
+        switch(msg) {
+          case '0': await event.reply('已取消，若要重新設定請點選選單'),start[senderID] = 0, step[senderID] = 0;
+            break;
+          case '1': await event.reply('請輸入常用站牌的路線號碼'), start[senderID] = 2, step[senderID] = 1;
+            break;
+          case '2': await event.reply(formatFlexMessage(`請選擇您想要刪除的常用站牌`,deleteFavorites,`content`,`index`)), start[senderID] = 4, step[senderID] = 1;
+            break;
+          default: await event.reply('輸入內容不正確。請輸入顯示的數字');
+        }
+      }
+      if(start[senderID] == 4) {
+        await  await deleteFlow(msg, senderID, event);
       }
     } catch (error) {
       console.log(error);
@@ -220,7 +244,7 @@ bot.on('message', async function(event) {
       let route = myCache.get(msg.trim());
       let go = `去程往 ${route.destinationStopName} 方向`;
       let back = `回程往 ${route.departureStopName} 方向`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], 'postback', 'buttons'));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], [go,back,"取消查詢"],'postback', 'buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
@@ -250,7 +274,7 @@ bot.on('message', async function(event) {
       let go = `去程往 ${route.destinationStopName} 方向`;
       let back = `回程往 ${route.departureStopName} 方向`;
       let cancel = `取消查詢`;
-      await event.reply(formatQuickReply("請選擇去程回程",[go,back,cancel], 'postback','buttons'));
+      await event.reply(formatQuickReply("請選擇去程回程",[go,back,cancel],[go,back,cancel], 'postback','buttons'));
       searchRoute[senderID] = msg;
       step[senderID] = 2.1;
     } catch (error) {
@@ -271,7 +295,7 @@ bot.on('message', async function(event) {
         stopName: StopName.Zh_tw,
         UserId: user.id
       });
-      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],'postback','buttons'));
+      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],["是","否"],'postback','buttons'));
       // step[senderID] = 0;
       // start[senderID] = 0;
       step[senderID] = 4;
@@ -299,15 +323,17 @@ bot.on('message', async function(event) {
   let user = await userService.findByLineId(senderID);
   let favorites = await favoriteService.findByUserId(user.id);
   if(step[senderID] == 1) {
-    await event.reply('您可以新增、編輯或刪除常用站牌。請根據您要進行的設定，輸入對應的號碼。\n\n' +
-    '1.新增： 設定新的常用站牌\n2.刪除：移除先前設定的常用站牌\n\n 0.取消');
+    // await event.reply('您可以新增、編輯或刪除常用站牌。請根據您要進行的設定，輸入對應的號碼。\n\n' +
+    //     // '1.新增： 設定新的常用站牌\n2.刪除：移除先前設定的常用站牌\n\n 0.取消');
+    await event.reply(formatQuickReply('您可以新增、編輯或刪除常用站牌',['新增','刪除','取消'],['1','2','0'],'postback','buttons'))
     start[senderID] = 3;
     step[senderID] = 3.2;
   } else if (step[senderID] == 3.2) {
     let deleteMsg = "請選擇您想要刪除的常用站牌。\n\n";
     for(let i = 1; i <= favorites.length; i++) {
       const favorite = favorites[i-1];
-      deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
+      let routeInfo = myCache.get(favorite.routeId);
+      deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}\n`;
     }
     deleteMsg += '\n0.取消';
     switch(msg) {
