@@ -205,6 +205,8 @@ bot.on('message', async function(event) {
         }
       }
       else if (step[senderID] == 3.2) {
+        let user = await userService.findByLineId(senderID);
+        let favorites = await favoriteService.findByUserId(user.id);
         let deleteMsg = "請選擇您想要刪除的常用站牌。\n\n";
         let deleteFavorites = [];
         for(let i = 1; i <= favorites.length; i++) {
