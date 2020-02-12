@@ -222,13 +222,13 @@ bot.on('message', async function(event) {
             break;
           case '1': await event.reply('請輸入常用站牌的路線號碼'), start[senderID] = 2, step[senderID] = 1;
             break;
-          case '2': await event.reply(formatFlexMessage(`請選擇您想要刪除的常用站牌`,deleteFavorites,`content`,`index`)), start[senderID] = 4, step[senderID] = 1;
+          case '2': await event.reply(formatFlexMessage(`請選擇您想要刪除的常用站牌`,deleteFavorites,`content`,`index`)),step[senderID] = 4.1;
             break;
           default: await event.reply('輸入內容不正確。請輸入顯示的數字');
         }
       }
-      if(start[senderID] == 4) {
-        await  await deleteFlow(msg, senderID, event);
+      else if(step[senderID] == 4.1) {
+        await deleteFlow(msg, senderID, event);
       }
     } catch (error) {
       console.log(error);
@@ -351,6 +351,7 @@ bot.on('message', async function(event) {
  }
 
  async function deleteFlow(msg, senderID, event) {
+    console.log("delete flow");
     let user = await userService.findByLineId(senderID); 
     let favorites = await favoriteService.findByUserId(user.id);
     if(!isNaN(msg)) {
