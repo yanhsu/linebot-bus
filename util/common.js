@@ -94,7 +94,7 @@ module.exports.formatFlexMessage = (title, contents, labelName, dataName) => {
       "style": i%2 ?"primary": "secondary",
       "action": {
         "type": "postback",
-        "label": content[labelName],//StopName.Zh_tw
+        "label": labelName == "StopName.Zh_tw"?content["StopName"]["Zh_tw"]:content[labelName],//StopName.Zh_tw
         "data": content[dataName] //StopSequence
       }
     });

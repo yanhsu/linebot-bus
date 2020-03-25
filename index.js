@@ -229,6 +229,7 @@ bot.on('message', async function(event) {
       }
       else if(step[senderID] == 4.1) {
         await deleteFlow(msg, senderID, event);
+        await event.reply('刪除成功');
       }
     } catch (error) {
       console.log(error);
