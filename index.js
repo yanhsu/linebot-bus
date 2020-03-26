@@ -389,14 +389,18 @@ bot.on('message', async function(event) {
       step[senderID] = 0;
       start[senderID] = 0;
     } else {
-      let chooseMsg = '請選擇您要查詢的站牌\n\n';
+      // let chooseMsg = '請選擇您要查詢的站牌\n\n';
+      const myFavorites = [];
       for(let i = 1; i <= favorites.length; i++) {
         const favorite = favorites[i-1];
-        chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
+        let routeInfo = myCache.get(favorite.routeId);
+        myFavorites.push({ index: favorite.routeId, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
+        // chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
       }
-      chooseMsg += '\n0.取消';
-      await event.reply(chooseMsg);
-      step[senderID] = 1;
+      myFavorites.push({index: 0, content: `取消查詢`});
+      // chooseMsg += '\n0.取消';
+      await event.reply(formatFlexMessage(`請選擇您想要查詢的常用站牌`,myFavorites,`content`,`content`))
+      step[senderID] = 2;
     }
   } else if(step[senderID] == 1) {
     if(!isNaN(msg)) {
