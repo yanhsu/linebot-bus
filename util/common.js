@@ -73,6 +73,7 @@ module.exports.formatFlexMessage = (title, contents, labelName, dataName) => {
   }
   let template = {
     "type": "bubble",
+    "size": "giga",
     "body": {
       "type": "box",
       "layout": "vertical",
