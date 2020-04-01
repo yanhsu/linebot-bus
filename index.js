@@ -231,7 +231,7 @@ bot.on('message', async function(event) {
         await deleteFlow(msg, senderID, event);
         await event.reply('刪除成功');
       } else if(step[senderID] == 6) {
-        if(data == 0) {
+        if(msg == 0) {
           await event.reply('已取消，若要重新查詢請點選選單'),start[senderID] = 0, step[senderID] = 0;
         } else {
           let data = msg.split(",");
