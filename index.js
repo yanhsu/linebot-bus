@@ -230,6 +230,17 @@ bot.on('message', async function(event) {
       else if(step[senderID] == 4.1) {
         await deleteFlow(msg, senderID, event);
         await event.reply('刪除成功');
+      } else if(step[senderID] == 6) {
+        if(data == 0) {
+          await event.reply('已取消，若要重新查詢請點選選單'),start[senderID] = 0, step[senderID] = 0;
+        } else {
+          let data = split(msg, ",");
+          let res = await bus.getEstimateTimeByStopId(data[0], data[1], data[2]);
+          await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
+          step[senderID] = 0;
+          start[senderID] = 0;
+        }
+
       }
     } catch (error) {
       console.log(error);
@@ -394,13 +405,13 @@ bot.on('message', async function(event) {
       for(let i = 1; i <= favorites.length; i++) {
         const favorite = favorites[i-1];
         let routeInfo = myCache.get(favorite.routeId);
-        myFavorites.push({ index: favorite.routeId, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
+        myFavorites.push({ index: `${favorite.routeId},${favorite.direction},${favorite.stopId}`, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
         // chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
       }
       myFavorites.push({index: 0, content: `取消查詢`});
       // chooseMsg += '\n0.取消';
       await event.reply(formatFlexMessage(`請選擇您想要查詢的常用站牌`,myFavorites,`content`,`content`))
-      step[senderID] = 2;
+      step[senderID] = 6;
     }
   } else if(step[senderID] == 1) {
     if(!isNaN(msg)) {
