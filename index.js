@@ -230,7 +230,8 @@ bot.on('message', async function(event) {
       else if(step[senderID] == 4.1) {
         await deleteFlow(msg, senderID, event);
         await event.reply('刪除成功');
-      } else if(step[senderID] == 6) {
+      }
+      else if(step[senderID] == 6) {
         if(msg == 0) {
           await event.reply('已取消，若要重新查詢請點選選單'),start[senderID] = 0, step[senderID] = 0;
         } else {
@@ -411,7 +412,7 @@ bot.on('message', async function(event) {
       }
       myFavorites.push({index: 0, content: `取消查詢`});
       // chooseMsg += '\n0.取消';
-      await event.reply(formatFlexMessage(`請選擇您想要查詢的常用站牌`,myFavorites,`content`,`content`))
+      await event.reply(formatFlexMessage(`請選擇您想要查詢的常用站牌`,myFavorites,`content`,`index`))
       step[senderID] = 6;
     }
   } else if(step[senderID] == 1) {
