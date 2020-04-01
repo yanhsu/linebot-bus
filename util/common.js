@@ -134,6 +134,7 @@ module.exports.formatBusFlexMessage = (routeName, stops) => {
   }
   let template = {
     "type": "bubble",
+    "size": "giga",
     "header": {
       "type": "box",
       "layout": "vertical",
