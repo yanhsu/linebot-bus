@@ -407,7 +407,7 @@ bot.on('message', async function(event) {
       for(let i = 1; i <= favorites.length; i++) {
         const favorite = favorites[i-1];
         let routeInfo = myCache.get(favorite.routeId);
-        myFavorites.push({ index: `${favorite.routeId},${favorite.direction},${favorite.stopId}`, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
+        myFavorites.push({ index: `${favorite.routeId},${favorite.direction},${favorite.stopId}`, content: `${favorite.routeId} ${favorite.stopName} \n ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } `})
         // chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
       }
       myFavorites.push({index: 0, content: `取消查詢`});
