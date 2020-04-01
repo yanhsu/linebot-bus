@@ -234,7 +234,8 @@ bot.on('message', async function(event) {
         if(data == 0) {
           await event.reply('已取消，若要重新查詢請點選選單'),start[senderID] = 0, step[senderID] = 0;
         } else {
-          let data = split(msg, ",");
+          let data = msg.split(",");
+          console.log(data);
           let res = await bus.getEstimateTimeByStopId(data[0], data[1], data[2]);
           await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
           step[senderID] = 0;
