@@ -213,7 +213,7 @@ bot.on('message', async function(event) {
           const favorite = favorites[i-1];
           let routeInfo = myCache.get(favorite.routeId);
           deleteFavorites.push({ index: i, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}`})
-          deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.destinationStopName}`:`往${routeInfo.departureStopName}` } ${favorite.stopName}\n`;
+          deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}\n`;
         }
         deleteMsg += '\n0.取消';
         deleteFavorites.push({index: 0, content: `取消刪除`});
