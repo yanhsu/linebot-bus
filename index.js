@@ -193,7 +193,7 @@ bot.on('message', async function(event) {
         try {
           if(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/.test(time)) {
             await favoriteService.updateTimeByFavoriteId(favoriteId[senderID].id,  time);
-            await event.reply(`您設定的時間為${msg}\n 若要重新設定請點選下方選單。`);
+            await event.reply(`您設定的時間為${time}\n 若要重新設定請點選下方選單。`);
             start[senderID] = 0;
             step[senderID] = 0;
           } else {
