@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const bus = require('../bus/route');
 const moment = require('moment-timezone');
-const { formatEstimatedTimeOfArrival } = require('./util/common');
+const { formatEstimatedTimeOfArrival } = require('../util/common');
 class Cron {
   Cron() {
 
