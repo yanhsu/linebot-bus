@@ -11,6 +11,7 @@ class Cron {
     for(let favorite of favorites) {
       let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
       const msg = formatEstimatedTimeOfArrival(res.data[0]);
+      console.log(`push to client => ${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`)
       bot.push(favorite.User.lineId, `${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
     }
   }
