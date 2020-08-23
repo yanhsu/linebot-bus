@@ -12,10 +12,10 @@ global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
 
-setInterval(function() {
-  https.get("https://taichungbus.herokuapp.com/");
-  console.log("get success");
-}, 600001);
+// setInterval(function() {
+//   https.get("https://taichungbus.herokuapp.com/");
+//   console.log("get success");
+// }, 600001);
 
 let bot = linebot({
     channelId: process.env.ChannelId || channelId,
@@ -442,7 +442,7 @@ bot.on('message', async function(event) {
   await cronService.pushFavoriteStop(bot);
   // console.log('running on every minute');
 });
- cron.schedule('0 5 * * *',async () => {
+ cron.schedule('0 7 * * *',async () => {
    cache.flushAll();
    await cronService.updateRouteInfo();
    await cronService.setCache(myCache);
