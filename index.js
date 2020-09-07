@@ -11,11 +11,18 @@ const myCache = new NodeCache();
 global.Service = new Service();
 const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
+const moment = require('moment-timezone');
+const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
+let varInterval;
+if(timeNow > "06:00") {
+  varInterval = setInterval(function() {
+    https.get("https://taichungbus.herokuapp.com/");
+    console.log("get success");
+  }, 600001);
+} else {
+  clearInterval(myVar);
+}
 
-// setInterval(function() {
-//   https.get("https://taichungbus.herokuapp.com/");
-//   console.log("get success");
-// }, 600001);
 
 let bot = linebot({
     channelId: process.env.ChannelId || channelId,
