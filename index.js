@@ -451,7 +451,7 @@ bot.on('message', async function(event) {
    await cronService.setCache(myCache);
  })
  cron.schedule('30 23 * * *'), async () => {
-  clearInterval(varInterval);
+  await clearInterval(varInterval);
 }
  cron.schedule()
   const app = express();
