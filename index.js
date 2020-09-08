@@ -453,7 +453,6 @@ bot.on('message', async function(event) {
  cron.schedule('30 23 * * *', async () => {
    clearInterval(varInterval);
  })
- cron.schedule()
   const app = express();
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
