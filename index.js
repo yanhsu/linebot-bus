@@ -450,9 +450,9 @@ bot.on('message', async function(event) {
    await cronService.updateRouteInfo();
    await cronService.setCache(myCache);
  })
- cron.schedule('30 23 * * *'), async () => {
+ cron.schedule('30 23 * * *', async () => {
   await clearInterval(varInterval);
-}
+ })
  cron.schedule()
   const app = express();
   const linebotParser = bot.parser();
