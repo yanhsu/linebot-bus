@@ -456,6 +456,9 @@ bot.on('message', async function(event) {
   const app = express();
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
+  app.get('/', function (){
+    return "hello world";
+  });
   
   global.server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
