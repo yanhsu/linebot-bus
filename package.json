@@ -19,7 +19,7 @@
   "homepage": "https://github.com/yanhsu/linebot-bus#readme",
   "dependencies": {
     "@line/bot-sdk": "^6.4.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "config": "^3.0.1",
     "express": "^4.16.4",
     "jssha": "^2.3.1",
