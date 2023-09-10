@@ -13,7 +13,7 @@ class Cron {
       let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
       const msg = formatEstimatedTimeOfArrival(res.data[0]);
       // console.log(`push to client => ${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`)
-      bot.push(favorite.user.lineId, `${favorite.routName}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
+      bot.push(favorite.user.lineId, `${favorite.routeName}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
     }
   }
 
