@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  var Route = sequelize.define('Route', {
+  var Route = sequelize.define('busroute', {
     routeUID: { // 路線唯一ID
       allowNull: false,
       type: DataTypes.STRING
@@ -16,6 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     }
-  });
+  }, {schema:"bus"});
   return Route;
 };

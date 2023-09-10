@@ -4,17 +4,17 @@ var Sequelize = require('sequelize');
 var basename = path.basename(__filename);
 
 var config = require('config');
-// const { connection } = config;
-// const { database, username, password, options } = connection;
+const { connection } = config;
+const { database, username, password, options } = connection;
 
 
 
 var db = {};
 let sequelize;
-if(process.env.CLEARDB_DATABASE_URL) {
+if(process.env.DATABASE_URL) {
 	sequelize = new Sequelize(process.env.database, process.env.username, process.env.password, {
 		host: process.env.host,
-		dialect: 'mysql',
+		dialect: 'postgres',
 		logging: false,
 		force: false,
 		dialectOptions: {

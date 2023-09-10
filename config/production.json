@@ -1,5 +1,5 @@
 {
-    "use_env_variable": "process.env.CLEARDB_DATABASE_URL",
-    "dialect": "mysql",
+    "use_env_variable": "process.env.DATABASE_URL",
+    "dialect": "postgres",
     "options": "process.env.Connection.options"
 }

@@ -1,6 +1,6 @@
 class User {
     async create(values) {
-        return await models.User.create(values);
+        return await models.user.create(values);
     }
 
     async findByLineId(lineId) {
@@ -9,7 +9,7 @@ class User {
                 lineId 
             }
         };
-        let user =  await models.User.findOne(options);
+        let user =  await models.user.findOne(options);
         return user;
     }
 }

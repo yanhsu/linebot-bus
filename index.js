@@ -13,10 +13,6 @@ const { channelId, channelAccessToken, channelSecret} = config;
 const { formatQuickReply, formatEstimatedTimeOfArrival,formatBusFlexMessage, formatFlexMessage } = require('./util/common');
 const moment = require('moment-timezone');
 const timeNow = moment().tz("Asia/Taipei").format("HH:mm");
-let varInterval = setInterval(function() {
-    https.get("https://taichungbus.herokuapp.com/");
-    console.log("get success");
-  }, 600001);
 
 
 
@@ -92,7 +88,7 @@ bot.on('message', async function(event) {
         searchDirection[senderID] = direction;
         console.log("direction = %s", direction);
         // let res = await bus.getStop(searchRoute[senderID], direction);
-        let res = await  bus.getAllEstimateTimeByRouteId(searchRoute[senderID], direction);
+        let res = await bus.getAllEstimateTimeByRouteId(myCache.get(searchRoute[senderID]).routeUID, direction);
         try {
           await new Promise(function (resolve, reject) {
             try {
@@ -125,7 +121,7 @@ bot.on('message', async function(event) {
           searchDirection[senderID] = direction;
           console.log("direction = %s", direction);
           // let res = await bus.getStop(searchRoute[senderID], direction);
-          let res = await  bus.getStop(searchRoute[senderID], direction);
+          let res = await  bus.getStop(myCache.get(searchRoute[senderID]).routeUID, direction);
           try {
             let isResolve = await new Promise(async function (resolve, reject) {
               try {
@@ -149,15 +145,16 @@ bot.on('message', async function(event) {
       else if (step[senderID] == 2.3) {
         try {
           // console.log("2.3 =>" + msg);
-          let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
+          let res = await bus.getEstimateTime(myCache.get(searchRoute[senderID]).routeUID, searchDirection[senderID], msg);
           const { StopName, StopID } = res.data[0];
           let user = await userService.findByLineId(senderID);
           favoriteId[senderID] = await favoriteService.create({
-            routeId: searchRoute[senderID],
+            routeId: myCache.get(searchRoute[senderID]).routeUID,
+            routeName: myCache.get(searchRoute[senderID]).routeName,
             direction: searchDirection[senderID],
             stopId: StopID,
             stopName: StopName.Zh_tw,
-            UserId: user.id
+            userId: user.id
           });
           let isResolve = await new Promise(async function (resolve, reject) {
             try{
@@ -215,8 +212,8 @@ bot.on('message', async function(event) {
         for(let i = 1; i <= favorites.length; i++) {
           const favorite = favorites[i-1];
           let routeInfo = myCache.get(favorite.routeId);
-          deleteFavorites.push({ index: i, content: `${favorite.routeId} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}`})
-          deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}\n`;
+          deleteFavorites.push({ index: i, content: `${favorite.routeName} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}`})
+          deleteMsg += `${i}. ${favorite.routeName} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}\n`;
         }
         deleteMsg += '\n0.取消';
         deleteFavorites.push({index: 0, content: `取消刪除`});
@@ -240,7 +237,7 @@ bot.on('message', async function(event) {
         } else {
           let data = msg.split(",");
           console.log(data);
-          let res = await bus.getEstimateTimeByStopId(data[0], data[1], data[2]);
+          let res = await bus.getEstimateTimeByStopId(myCache.get(data[0]).routeUID, data[1], data[2]);
           await event.reply(formatEstimatedTimeOfArrival(res.data[0]));
           step[senderID] = 0;
           start[senderID] = 0;
@@ -261,9 +258,11 @@ bot.on('message', async function(event) {
     try {
       // let route = await bus.getRoute(msg.trim());
       let route = myCache.get(msg.trim());
+      console.log(route);
       let go = `去程往 ${route.destinationStopName} 方向`;
       let back = `回程往 ${route.departureStopName} 方向`;
       await event.reply(formatQuickReply("請選擇去程回程",[go,back,"取消查詢"], [go,back,"取消查詢"],'postback', 'buttons'));
+      console.log(msg);
       searchRoute[senderID] = msg;
       step[senderID] = 2;
     } catch (error) {
@@ -303,18 +302,19 @@ bot.on('message', async function(event) {
   }
     else if (step[senderID] == 3) {
     try {
-      let res = await bus.getEstimateTime(searchRoute[senderID], searchDirection[senderID], msg);
+      let res = await bus.getEstimateTime(myCache.get(searchRoute[senderID]).routeUID, searchDirection[senderID], msg);
       const { StopName, StopID } = res.data[0];
       console.log(res.data[0]);
 
       favoriteId[senderID] = await favoriteService.create({
-        routeId: searchRoute[senderID],
+        routeId: myCache.get(searchRoute[senderID]).routeUID,
+        routeName: myCache.get(searchRoute[senderID]).routeName,
         direction: searchDirection[senderID],
         stopId: StopID,
         stopName: StopName.Zh_tw,
-        UserId: user.id
+        userId: user.id
       });
-      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],["是","否"],'postback','buttons'));
+      await event.reply(formatQuickReply(`已新增${searchRoute[senderID]} ${searchDirection[senderID]?"回程": "去程"} ${StopName.Zh_tw} 為常用站牌\n是否開啟定時推播`,["是","否"],["是","否"],'datetimepicker','buttons'));
       // step[senderID] = 0;
       // start[senderID] = 0;
       step[senderID] = 4;
@@ -352,7 +352,7 @@ bot.on('message', async function(event) {
     for(let i = 1; i <= favorites.length; i++) {
       const favorite = favorites[i-1];
       let routeInfo = myCache.get(favorite.routeId);
-      deleteMsg += `${i}. ${favorite.routeId} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}\n`;
+      deleteMsg += `${i}. ${favorite.routeName} ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } ${favorite.stopName}\n`;
     }
     deleteMsg += '\n0.取消';
     switch(msg) {
@@ -398,6 +398,7 @@ bot.on('message', async function(event) {
   if(!user) {
     user = await userService.create({ lineId: senderID });
   }
+  console.log(user.id);
   let favorites = await favoriteService.findByUserId(user.id);
   if(msg == '常用站牌') {
     if(favorites.length < 1) {
@@ -410,7 +411,7 @@ bot.on('message', async function(event) {
       for(let i = 1; i <= favorites.length; i++) {
         const favorite = favorites[i-1];
         let routeInfo = myCache.get(favorite.routeId);
-        myFavorites.push({ index: `${favorite.routeId},${favorite.direction},${favorite.stopId}`, content: `${favorite.routeId} ${favorite.stopName} \n ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } `})
+        myFavorites.push({ index: `${favorite.routeId},${favorite.direction},${favorite.stopId}`, content: `${favorite.routeName} ${favorite.stopName} \n ${favorite.direction?`往${routeInfo.departureStopName}`:`往${routeInfo.destinationStopName}` } `})
         // chooseMsg += `${i}. ${favorite.routeId} ${favorite.direction?"回程": "去程"} ${favorite.stopName}\n`;
       }
       myFavorites.push({index: 0, content: `取消查詢`});
@@ -443,16 +444,16 @@ bot.on('message', async function(event) {
  }
  cron.schedule('*/1 * * * *', async () => {
   await cronService.pushFavoriteStop(bot);
-  // console.log('running on every minute');
+  console.log('running on every minute');
 });
- cron.schedule('0 7 * * *',async () => {
-   cache.flushAll();
+ cron.schedule('* 7 * * *',async () => {
+  myCache.flushAll();
    await cronService.updateRouteInfo();
    await cronService.setCache(myCache);
  })
- cron.schedule('30 23 * * *', async () => {
-   clearInterval(varInterval);
- })
+//  cron.schedule('30 23 * * *', async () => {
+//    clearInterval(varInterval);
+//  })
   const app = express();
   const linebotParser = bot.parser();
   app.post('/', linebotParser);
@@ -463,6 +464,7 @@ bot.on('message', async function(event) {
   global.server = app.listen(process.env.PORT || 9006, async function() {
     let port = server.address().port;
     console.log("App now running on port", port);
+    // await cronService.updateRouteInfo();
     await cronService.setCache(myCache);
   });
 

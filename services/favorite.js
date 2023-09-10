@@ -1,15 +1,15 @@
 class Favorite {
     async create(values) {
-        return await models.Favorite.create(values);
+        return await models.favorite.create(values);
     }
     
     async findByUserId(UserId) {
         let options = {
             where: {
-                UserId
+                "userId": UserId
             }
         };
-        let favorites = await models.Favorite.findAll(options);
+        let favorites = await models.favorite.findAll(options);
         return favorites;
     }
 
@@ -19,7 +19,7 @@ class Favorite {
                 id: favoriteId
             }
         };
-        let result = await models.Favorite.destroy(options);
+        let result = await models.favorite.destroy(options);
         return result == 1;
     }
 
@@ -27,7 +27,7 @@ class Favorite {
         let options = {
             triggerTime: time
         }
-        let result = await models.Favorite.update(options, { where: { id: favoriteId }});
+        let result = await models.favorite.update(options, { where: { id: favoriteId }});
         return result;
     }
     
@@ -36,9 +36,9 @@ class Favorite {
             where: {
                 triggerTime: time
             },
-            include: [ { model: models.User, require: false }]
+            include: [ { model: models.user, require: false }]
         };
-        let favorites = await models.Favorite.findAll(options);
+        let favorites = await models.favorite.findAll(options);
         return favorites;
     }
 }

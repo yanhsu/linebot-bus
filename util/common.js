@@ -1,20 +1,41 @@
-const jsSHA = require('jssha');
 const moment = require('moment-timezone');
 const config = require('config');
 const _ = require('lodash');
-
-module.exports.getAuthorizationHeader = () => {
-	var AppID = process.env.AppID || config.AppID;
-	var AppKey = process.env.AppKey || config.AppKey;
+const axios = require('axios');
+const NodeCache = require('node-cache');
+const myCache = new NodeCache();
+const qs  = require('qs');
+module.exports.getAuthorizationHeader = async () => {
+  const grant_type = 'client_credentials';
+	const client_id = process.env.clientId || config.clientId;
+	const client_secret = process.env.clientSecret || config.clientSecret;
+  let token = myCache.get('token');
+  // console.log("clientId =>",client_id);
+  try {
+    if(!token) {
+      let res = await axios({
+        url: 'https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: qs.stringify({
+          grant_type,
+          client_id,
+          client_secret
+        })
+      });
+      // console.log("res =>",res.data);
+      token = res?.data?.access_token;
+      myCache.set('token', token, 86400);
+      // console.log("token =>",token);
+    }
+  } catch (error) {
+    console.log(error)
+    throw error;
+  }
     
-	var GMTString = new Date().toGMTString();
-	var ShaObj = new jsSHA('SHA-1', 'TEXT');
-	ShaObj.setHMACKey(AppKey, 'TEXT');
-	ShaObj.update('x-date: ' + GMTString);
-	var HMAC = ShaObj.getHMAC('B64');
-	var Authorization = 'hmac username=\"' + AppID + '\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"' + HMAC + '\"';
-    
-	return { 'Authorization': Authorization, 'X-Date': GMTString};
+	return { 'Content-type': 'application/x-www-form-urlencoded', 'Authorization': `Bearer ${token}`};
 };
 
 module.exports.formatQuickReply = (title, replies,data, actionType, templateType) => {

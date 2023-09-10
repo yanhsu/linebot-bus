@@ -13,7 +13,7 @@ class Cron {
       let res = await bus.getEstimateTimeByStopId(favorite.routeId, favorite.direction, favorite.stopId);
       const msg = formatEstimatedTimeOfArrival(res.data[0]);
       console.log(`push to client => ${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`)
-      bot.push(favorite.User.lineId, `${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
+      bot.push(favorite.user.lineId, `${favorite.routeId}路公車 \n${res.data[0].StopName.Zh_tw}站 ${msg}`);
     }
   }
 
@@ -35,8 +35,10 @@ class Cron {
 
   async setCache(myCache) {
     const allRoute = await routeService.findAll();
+    console.log(allRoute);
     for(let route of allRoute) {
-      console.log(route.routeName);
+      // console.log(route.dataValues);
+      myCache.set(route.routeUID, route.dataValues, 86400);
       myCache.set(route.routeName, route.dataValues, 86400);
     }
   }
